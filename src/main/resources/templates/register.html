@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Реєстрація — BookCloud</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/auth.css}">
+
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+        <div class="logo">
+            📚 BookCloud
+        </div>
+
+        <h1>
+            Створити акаунт
+        </h1>
+
+        <p class="subtitle">
+            Створіть акаунт і почніть створювати свою бібліотеку
+        </p>
+
+
+        <!-- Помилка -->
+
+        <div
+                class="alert error"
+                th:if="${error}"
+                th:text="${error}">
+
+            Помилка реєстрації
+
+        </div>
+
+
+        <form
+                th:action="@{/register}"
+                th:object="${RegNewUser}"
+                method="post"
+                class="auth-form">
+
+
+            <div class="form-group">
+
+                <label for="username">
+                    Ім'я користувача
+                </label>
+
+                <input
+                        id="username"
+                        type="text"
+                        name="username"
+                        placeholder="Придумайте username"
+                        required
+                        minlength="3"
+                        maxlength="50"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Пароль
+                </label>
+
+                <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Придумайте пароль"
+                        required
+                        minlength="6"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="confirmPassword">
+                    Підтвердження пароля
+                </label>
+
+                <input
+                        id="confirmPassword"
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Повторіть пароль"
+                        required
+                >
+
+            </div>
+
+
+            <button
+                    type="submit"
+                    class="submit-button">
+
+                Створити акаунт
+
+            </button>
+
+        </form>
+
+
+        <div class="auth-footer">
+
+            <span>
+                Вже маєте акаунт?
+            </span>
+
+            <a th:href="@{/login}">
+                Увійти
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

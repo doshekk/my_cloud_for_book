@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BookCloud</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/home.css}">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        📚 BookCloud
+    </div>
+
+    <nav class="navigation">
+
+        <a th:href="@{/}"
+           class="active">
+            Головна
+        </a>
+
+        <a th:href="@{/books}">
+            Мої книги
+        </a>
+
+        <a th:href="@{/books/upload}">
+            Завантажити
+        </a>
+
+    </nav>
+
+    <div class="user-menu">
+
+        <span th:text="${username}">
+            Username
+        </span>
+
+        <form th:action="@{/logout}"
+              method="post">
+
+            <button type="submit">
+                Вийти
+            </button>
+
+        </form>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+    <!-- Привітання -->
+
+    <section class="welcome">
+
+        <div>
+
+            <p class="welcome-label">
+                Вітаємо у BookCloud
+            </p>
+
+            <h1>
+
+                Привіт,
+                <span th:text="${username}">
+                    User
+                </span>
+                👋
+
+            </h1>
+
+            <p class="welcome-text">
+                Зберігайте свої книги в одному місці
+                та продовжуйте читати з будь-якого пристрою.
+            </p>
+
+        </div>
+
+
+        <a th:href="@{/books/upload}"
+           class="primary-button">
+
+            + Завантажити книгу
+
+        </a>
+
+    </section>
+
+
+    <!-- Статистика -->
+
+    <section class="statistics">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📚
+            </div>
+
+            <div>
+
+                <span class="stat-title">
+                    Всього книг
+                </span>
+
+                <strong
+                        th:text="${totalBooks}">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <span class="stat-title">
+                    Прочитано
+                </span>
+
+                <strong
+                        th:text="${readBooks}">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📖
+            </div>
+
+            <div>
+
+                <span class="stat-title">
+                    Читаю зараз
+                </span>
+
+                <strong
+                        th:text="${readingBooks}">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ⭐
+            </div>
+
+            <div>
+
+                <span class="stat-title">
+                    Улюблені
+                </span>
+
+                <strong
+                        th:text="${favoriteBooks}">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Швидкі дії -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Швидкі дії
+            </h2>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+            <a th:href="@{/books/upload}"
+               class="action-card">
+
+                <div class="action-icon">
+                    ⬆
+                </div>
+
+                <div>
+
+                    <h3>
+                        Завантажити книгу
+                    </h3>
+
+                    <p>
+                        Додайте PDF або EPUB
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <a th:href="@{/books}"
+               class="action-card">
+
+                <div class="action-icon">
+                    📚
+                </div>
+
+                <div>
+
+                    <h3>
+                        Моя бібліотека
+                    </h3>
+
+                    <p>
+                        Переглянути всі книги
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <a th:href="@{/books?status=reading}"
+               class="action-card">
+
+                <div class="action-icon">
+                    📖
+                </div>
+
+                <div>
+
+                    <h3>
+                        Продовжити читання
+                    </h3>
+
+                    <p>
+                        Повернутися до книги
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- Останні книги -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Останні книги
+                </h2>
+
+                <p>
+                    Книги, які ви нещодавно додали
+                </p>
+
+            </div>
+
+            <a th:href="@{/books}">
+                Переглянути всі →
+            </a>
+
+        </div>
+
+
+        <div class="books-grid">
+
+            <article
+                    class="book-card"
+                    th:each="book : ${recentBooks}">
+
+                <div class="book-cover">
+
+                    <img
+                            th:if="${book.coverPath != null}"
+                            th:src="@{/books/{id}/cover(id=${book.id})}"
+                            th:alt="${book.title}"
+                    >
+
+                    <div
+                            class="no-cover"
+                            th:unless="${book.coverPath != null}">
+
+                        📖
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-info">
+
+                    <h3
+                            th:text="${book.title}">
+                        Назва книги
+                    </h3>
+
+                    <p
+                            th:text="${book.author}">
+                        Автор
+                    </p>
+
+
+                    <span
+                            class="genre"
+                            th:text="${book.genre}">
+                        Жанр
+                    </span>
+
+
+                    <a
+                            th:href="@{/books/{id}/read(id=${book.id})}"
+                            class="read-button">
+
+                        Відкрити книгу
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- Якщо книг немає -->
+
+            <div
+                    class="empty"
+                    th:if="${#lists.isEmpty(recentBooks)}">
+
+                <div>
+                    📚
+                </div>
+
+                <h3>
+                    Тут поки порожньо
+                </h3>
+
+                <p>
+                    Завантажте свою першу книгу.
+                </p>
+
+                <a th:href="@{/books/upload}">
+                    Додати книгу
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>
