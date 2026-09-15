@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Серія — FileCloud</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/book-search.css}">
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="logo">
+            FileCloud
+        </div>
+
+        <a th:href="@{/books}"
+           class="back-button">
+
+            ← Назад до книг
+
+        </a>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="content">
+
+
+        <!-- SEARCH CARD -->
+
+        <div class="search-card">
+
+            <div class="search-header">
+
+                <h1>
+                    Відкрити серію
+                </h1>
+
+                <p>
+                    Введіть номер серії, щоб переглянути її книги
+                </p>
+
+            </div>
+
+
+            <!-- SEARCH FORM -->
+
+            <form id="series-form"
+                  method="get"
+                  class="search-form">
+
+                <div class="form-group">
+
+                    <label for="seriesId">
+                        Номер серії
+                    </label>
+
+                    <input
+                            type="number"
+                            id="seriesId"
+                            name="seriesId"
+                            placeholder="Наприклад: 21084"
+                            min="1"
+                            autocomplete="off"
+                            required>
+
+                </div>
+
+
+                <button
+                        type="submit"
+                        class="search-button">
+
+                    Відкрити серію
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <section
+                class="results"
+                th:if="${books != null}">
+
+
+            <!-- RESULTS HEADER -->
+
+            <div class="results-header">
+
+                <div>
+
+                    <h2>
+                        Книги серії
+                    </h2>
+
+                    <p th:if="${query != null}"
+                       th:text="'Номер серії: ' + ${query}">
+
+                        Номер серії
+
+                    </p>
+
+                </div>
+
+
+                <span
+                        class="results-count"
+                        th:text="'Знайдено: ' + ${total}">
+
+                    Знайдено: 0
+
+                </span>
+
+            </div>
+
+
+            <!-- BOOKS -->
+
+            <div class="book-grid">
+
+
+                <!-- BOOK CARD -->
+
+                <article
+                        class="book-card"
+                        th:each="book : ${books}">
+
+
+                    <!-- COVER -->
+
+                    <div class="book-cover">
+
+                        <div class="book-icon"></div>
+
+                    </div>
+
+
+                    <!-- INFORMATION -->
+
+                    <div class="book-info">
+
+
+                        <!-- TITLE -->
+
+                        <h3
+                                class="book-title"
+                                th:text="${book.title}">
+
+                            Назва книги
+
+                        </h3>
+
+
+                        <!-- AUTHOR -->
+
+                        <p
+                                class="author"
+                                th:if="${book.author != null}"
+                                th:text="${book.author}">
+
+                            Автор
+
+                        </p>
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="book-actions">
+
+
+                            <!-- BOOK -->
+
+                            <a
+                                    th:if="${book.bookId != null}"
+                                    class="details-button"
+                                    th:href="@{/book/{id}(id=${book.bookId})}"
+                                    target="_blank">
+
+                                Відкрити книгу
+
+                            </a>
+
+
+                            <!-- AUTHOR -->
+
+                            <a
+                                    th:if="${book.authorId != null}"
+                                    class="author-button"
+                                    th:href="@{/author/{id}(id=${book.authorId})}"
+                                    target="_blank">
+
+                                Автор
+
+                            </a>
+
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- EMPTY -->
+
+                <div
+                        class="empty"
+                        th:if="${#lists.isEmpty(books)}">
+
+                    <h3>
+                        Книги не знайдено
+                    </h3>
+
+                    <p>
+                        У цій серії немає книг або номер серії вказано неправильно.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- FORM REDIRECT -->
+
+<script>
+
+    document
+        .getElementById("series-form")
+        .addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            const id =
+                document.getElementById("seriesId").value.trim();
+
+            if (!id) {
+                return;
+            }
+
+            window.location.href = "/serias/" + id;
+
+        });
+
+</script>
+
+
+</body>
+
+</html>

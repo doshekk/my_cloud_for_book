@@ -1,6 +1,6 @@
-package org.example.filecloud.service;
+package org.example.filecloud.service.auth;
 
-import org.example.filecloud.dao.User;
+import org.example.filecloud.dao.user.User;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

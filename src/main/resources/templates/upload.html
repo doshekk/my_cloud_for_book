@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Завантажити книгу</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/upload.css}">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        📚 BookCloud
+    </div>
+
+
+    <nav class="navigation">
+
+        <a th:href="@{/}">
+            Головна
+        </a>
+
+        <a th:href="@{/books}">
+            Мої книги
+        </a>
+
+        <a th:href="@{/books/upload}"
+           class="active">
+            Завантажити книгу
+        </a>
+
+    </nav>
+
+
+    <div class="user">
+
+    <span th:text="${username}">
+        Username
+    </span>
+
+    </div>
+
+
+</header>
+
+<main class="container">
+
+
+    <!-- Заголовок -->
+
+    <section class="page-header">
+
+        <div>
+
+            <h1>
+                Завантажити книгу
+            </h1>
+
+            <p>
+                Додайте нову книгу до своєї бібліотеки
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Форма -->
+
+    <section class="upload-card">
+
+        <form th:action="@{/books/upload}"
+              method="post"
+              enctype="multipart/form-data"
+              class="upload-form">
+
+
+            <!-- НАЗВА -->
+
+            <div class="form-group">
+
+                <label for="title">
+                    Назва книги
+                </label>
+
+                <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Введіть назву книги"
+                        required
+                >
+
+            </div>
+
+
+
+            <!-- АВТОР -->
+
+            <div class="form-group">
+
+                <label for="author">
+                    Автор
+                </label>
+
+                <input
+                        type="text"
+                        id="author"
+                        name="author"
+                        placeholder="Введіть ім'я автора"
+                        required
+                >
+
+            </div>
+
+
+
+            <!-- ОПИС -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Опис
+                </label>
+
+                <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Короткий опис книги..."
+                        rows="5"></textarea>
+
+            </div>
+
+
+
+            <!-- ЖАНРИ -->
+            <div class="genres-grid">
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="AUTOBIOGRAPHY">
+                    <span>Автобіографія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="DYSTOPIA">
+                    <span>Антиутопія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="ASTRONOMY">
+                    <span>Астрономія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="BUSINESS">
+                    <span>Бізнес</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="BIOGRAPHY">
+                    <span>Біографія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="BIOLOGY">
+                    <span>Біологія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="WESTERN">
+                    <span>Вестерн</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="GEOGRAPHY">
+                    <span>Географія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="DETECTIVE">
+                    <span>Детектив</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="CHILDREN">
+                    <span>Дитяча література</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="REFERENCE">
+                    <span>Довідкова література</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="DRAMA">
+                    <span>Драма</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="ECONOMICS">
+                    <span>Економіка</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="ENCYCLOPEDIA">
+                    <span>Енциклопедія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="HORROR">
+                    <span>Жахи</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="JOURNALISM">
+                    <span>Журналістика</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="COMEDY">
+                    <span>Комедія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="COMPUTER_SCIENCE">
+                    <span>Комп'ютерні науки</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="COMICS">
+                    <span>Комікси</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="COOKING">
+                    <span>Кулінарія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="CRIME">
+                    <span>Кримінал</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="MANGA">
+                    <span>Манґа</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="MARKETING">
+                    <span>Маркетинг</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="MATHEMATICS">
+                    <span>Математика</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="MANAGEMENT">
+                    <span>Менеджмент</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="MEMOIR">
+                    <span>Мемуари</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="ART">
+                    <span>Мистецтво</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="SCIENCE">
+                    <span>Наука</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="SCIENCE_FICTION">
+                    <span>Наукова фантастика</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="EDUCATION">
+                    <span>Освіта</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="TRAVEL">
+                    <span>Подорожі</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="POETRY">
+                    <span>Поезія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="POST_APOCALYPTIC">
+                    <span>Постапокаліпсис</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="ADVENTURE">
+                    <span>Пригоди</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="PROGRAMMING">
+                    <span>Програмування</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="PSYCHOLOGY">
+                    <span>Психологія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="RELIGION">
+                    <span>Релігія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="ROMANCE">
+                    <span>Романтика</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="SELF_DEVELOPMENT">
+                    <span>Саморозвиток</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="SPORT">
+                    <span>Спорт</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="HISTORICAL">
+                    <span>Історичне</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="HISTORY">
+                    <span>Історія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="MYSTERY">
+                    <span>Таємниці</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="THRILLER">
+                    <span>Трилер</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="FANTASY">
+                    <span>Фентезі</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="FINANCE">
+                    <span>Фінанси</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="PHYSICS">
+                    <span>Фізика</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="PHILOSOPHY">
+                    <span>Філософія</span>
+                </label>
+
+                <label class="genre-option">
+                    <input type="checkbox" name="bookGenre" value="CHEMISTRY">
+                    <span>Хімія</span>
+                </label>
+
+            </div>
+
+
+
+            <!-- УЛЮБЛЕНА -->
+
+            <div class="favorite-group">
+
+                <label class="favorite-option">
+
+                    <input
+                            type="checkbox"
+                            name="favorite"
+                            value="true">
+
+                    <input
+                            type="hidden"
+                            name="favorite"
+                            value="false">
+
+                    <span class="favorite-box">
+                    ♥
+                    </span>
+
+                    <span class="favorite-text">
+                        <strong>
+                            Додати до улюблених
+                        </strong>
+
+                        <small>
+                            Книга буде відображатися у списку улюблених
+                        </small>
+                    </span>
+                </label>
+            </div>
+
+            <!-- ФАЙЛ -->
+
+            <div class="form-group">
+
+                <label for="file">
+                    Файл книги
+                </label>
+
+                <div class="file-input">
+
+                    <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            accept=".pdf,.epub,.fb2"
+                            required
+                    >
+
+                </div>
+
+                <span class="hint">
+                Підтримуються формати PDF, EPUB та FB2
+            </span>
+
+            </div>
+
+
+
+            <!-- ОБКЛАДИНКА -->
+
+            <div class="form-group">
+
+                <label for="cover">
+                    Обкладинка
+                </label>
+
+                <div class="file-input">
+
+                    <input
+                            type="file"
+                            id="cover"
+                            name="cover"
+                            accept="image/jpeg,image/png,image/webp"
+                    >
+
+                </div>
+
+                <span class="hint">
+                JPG, PNG або WEBP. Необов'язково.
+            </span>
+
+            </div>
+
+
+
+            <!-- КНОПКИ -->
+
+            <div class="form-actions">
+
+                <a
+                        th:href="@{/books}"
+                        class="cancel-button">
+
+                    Скасувати
+
+                </a>
+
+
+                <button
+                        type="submit"
+                        class="upload-button">
+
+                    📤 Завантажити книгу
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </section>
+
+
+</main>
+
+</body>
+</html>

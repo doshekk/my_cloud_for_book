@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${book.title} + ' — FileCloud'">
+        Книга — FileCloud
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/book-info.css}">
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="logo">
+            FileCloud
+        </div>
+
+        <a th:href="@{/books}"
+           class="back-button">
+            ← Назад до книг
+        </a>
+
+    </header>
+
+
+    <!-- CONTENT -->
+    <main class="content">
+
+        <section class="book-container">
+
+            <!-- COVER -->
+            <div class="cover-container">
+
+                <img th:if="${book.coverUrl != null}"
+                     th:src="${book.coverUrl}"
+                     th:alt="${book.title}"
+                     class="book-cover">
+
+                <div th:if="${book.coverUrl == null}"
+                     class="no-cover">
+                    Обкладинка відсутня
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+            <div class="book-info">
+
+                <h1 th:text="${book.title}">
+                    Назва книги
+                </h1>
+
+
+                <!-- AUTHORS -->
+                <div class="authors"
+                     th:if="${book.authors != null and !book.authors.isEmpty()}">
+
+                    <h2>Автори</h2>
+
+                    <div class="author-list">
+
+                        <div class="author"
+                             th:each="author, stat : ${book.authors}">
+
+                            <a th:href="@{/author/{id}(id=${book.authorsId[stat.index]})}"
+                               th:text="${author}"
+                               target="_blank">
+                                Автор
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+                <div class="description"
+                     th:if="${book.description != null and !book.description.isBlank()}">
+
+                    <h2>Опис</h2>
+
+                    <p th:text="${book.description}">
+                        Опис книги
+                    </p>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="actions">
+
+<!--                    <a th:href="'https://flibusta.site/b/' + ${book.bookId}"-->
+<!--                       class="primary-button"-->
+<!--                       target="_blank">-->
+<!--                        Відкрити книгу-->
+<!--                    </a>-->
+
+                    <a th:href="@{/books}"
+                       class="secondary-button">
+                        Назад
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

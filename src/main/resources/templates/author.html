@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${author.name()} + ' — FileCloud'">
+        Автор — FileCloud
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/author.css}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================================================== -->
+<!-- HEADER -->
+<!-- ================================================== -->
+
+<header class="header">
+
+    <div class="header-container">
+
+        <a th:href="@{/}"
+           class="logo">
+            FileCloud
+        </a>
+
+
+        <a th:href="@{/books}"
+           class="back-link">
+            Мої книги
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================================================== -->
+<!-- MAIN -->
+<!-- ================================================== -->
+
+<main class="author-page">
+
+
+    <!-- ================================================== -->
+    <!-- AUTHOR INFORMATION -->
+    <!-- ================================================== -->
+
+    <section class="author-header">
+
+
+        <!-- AUTHOR IMAGE -->
+
+        <div class="author-avatar">
+
+            <img th:if="${author.imageUri() != null and !author.imageUri().isBlank()}"
+                 th:src="${author.imageUri()}"
+                 th:alt="${author.name()}"
+                 class="author-image">
+
+
+            <!-- IMAGE NOT FOUND -->
+
+            <div th:if="${author.imageUri() == null or author.imageUri().isBlank()}"
+                 class="no-cover">
+
+                Зображення відсутнє
+
+            </div>
+
+        </div>
+
+
+
+        <!-- AUTHOR INFORMATION -->
+
+        <div class="author-info">
+
+
+            <span class="author-label">
+                Автор
+            </span>
+
+
+            <h1 th:text="${author.name()}">
+                Ім'я автора
+            </h1>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <p th:if="${author.description() != null and !author.description().isBlank()}"
+               th:text="${author.description()}"
+               class="author-description"
+               style="white-space: pre-line;">
+            </p>
+
+
+
+            <!-- ================================================== -->
+            <!-- STATISTICS -->
+            <!-- ================================================== -->
+
+            <div class="author-stats">
+
+
+                <!-- SERIES COUNT -->
+
+                <div class="stat">
+
+                    <strong th:text="${#lists.size(series)}">
+                        0
+                    </strong>
+
+                    <span>
+                        Серій
+                    </span>
+
+                </div>
+
+
+
+                <!-- BOOK COUNT -->
+
+                <div class="stat">
+
+                    <strong th:text="${bookCount}">
+                        0
+                    </strong>
+
+                    <span>
+                        Книг
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================== -->
+    <!-- SERIES SECTION -->
+    <!-- ================================================== -->
+
+    <section class="series-section">
+
+
+        <!-- SECTION HEADER -->
+
+        <div class="section-header">
+
+            <h2>
+                Серії книг
+            </h2>
+
+
+            <span th:text="${#lists.size(series)}">
+                0
+            </span>
+
+        </div>
+
+
+
+        <!-- ================================================== -->
+        <!-- NO SERIES -->
+        <!-- ================================================== -->
+
+        <div class="empty"
+             th:if="${series == null or #lists.isEmpty(series)}">
+
+
+            <h3>
+                Серій не знайдено
+            </h3>
+
+
+            <p>
+                У цього автора поки немає інформації про серії.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================================================== -->
+        <!-- SERIES LIST -->
+        <!-- ================================================== -->
+
+        <div class="series-list"
+             th:if="${series != null and !#lists.isEmpty(series)}">
+
+
+            <!-- ================================================== -->
+            <!-- SERIES -->
+            <!-- ================================================== -->
+
+            <article class="series-card"
+                     th:each="currentSeries : ${series}">
+
+
+                <!-- SERIES HEADER -->
+
+                <div class="series-card-header">
+
+
+                    <div>
+
+                        <span class="series-label">
+                            Серія
+                        </span>
+
+
+                        <h3 th:text="${currentSeries.name()}">
+                            Назва серії
+                        </h3>
+
+                    </div>
+
+
+
+                    <!-- BOOK COUNT -->
+
+                    <span class="books-count"
+                          th:text="${#lists.size(currentSeries.books())} + ' книг'">
+
+                        0 книг
+
+                    </span>
+
+                </div>
+
+
+
+                <!-- ================================================== -->
+                <!-- BOOKS -->
+                <!-- ================================================== -->
+
+                <div class="books-list"
+                     th:if="${currentSeries.books() != null and !#lists.isEmpty(currentSeries.books())}">
+
+
+                    <!-- ================================================== -->
+                    <!-- BOOK -->
+                    <!-- ================================================== -->
+
+                    <a class="book"
+                       th:each="book, bookStat : ${currentSeries.books()}"
+                       th:href="@{'/book/' + ${book.id()}}">
+
+
+                        <!-- BOOK NUMBER -->
+
+                        <div class="book-number"
+                             th:text="${bookStat.index + 1}">
+
+                            1
+
+                        </div>
+
+
+
+                        <!-- BOOK INFORMATION -->
+
+                        <div class="book-info">
+
+
+                            <!-- BOOK TITLE -->
+
+                            <h4 th:text="${book.title()}">
+                                Назва книги
+                            </h4>
+
+
+
+                            <!-- ================================================== -->
+                            <!-- TRANSLATORS -->
+                            <!-- ================================================== -->
+
+                            <div class="translators"
+                                 th:if="${book.translators() != null and !#lists.isEmpty(book.translators())}">
+
+
+                                <span class="translator-label">
+                                    Перекладачі:
+                                </span>
+
+
+
+                                <span class="translator"
+                                      th:each="translator, translatorStat : ${book.translators()}">
+
+
+                                    <span th:text="${translator.name()}">
+                                        Перекладач
+                                    </span>
+
+
+                                    <span th:if="${!translatorStat.last}">
+                                        ,
+                                    </span>
+
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- BOOK ARROW -->
+
+                        <div class="book-arrow">
+                            →
+                        </div>
+
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- ================================================== -->
+                <!-- NO BOOKS -->
+                <!-- ================================================== -->
+
+                <div class="no-books"
+                     th:if="${currentSeries.books() == null or #lists.isEmpty(currentSeries.books())}">
+
+                    У цій серії книг не знайдено.
+
+                </div>
+
+
+            </article>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

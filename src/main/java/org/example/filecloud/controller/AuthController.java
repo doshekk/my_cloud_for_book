@@ -1,7 +1,7 @@
 package org.example.filecloud.controller;
 
-import org.example.filecloud.dto.RegNewUser;
-import org.example.filecloud.service.AuthService;
+import org.example.filecloud.dto.user.RegNewUser;
+import org.example.filecloud.service.auth.AuthService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +19,7 @@ public class AuthController {
     public String getLoginPage(){
         return "login";
     }
+
     @GetMapping("/register")
     public String getRegPage(){
         return "register";

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="uk"
       xmlns:th="http://www.thymeleaf.org">
 
@@ -35,17 +36,21 @@
             Мої книги
         </a>
 
+        <a th:href="@{/search}">
+            🔍 Пошук книг
+        </a>
+
         <a th:href="@{/books/upload}">
-            Завантажити
+            Завантажити книгу
         </a>
 
     </nav>
 
     <div class="user-menu">
 
-        <span th:text="${username}">
-            Username
-        </span>
+    <span th:text="${username}">
+        Username
+    </span>
 
         <form th:action="@{/logout}"
               method="post">
@@ -59,7 +64,6 @@
     </div>
 
 </header>
-
 
 <main class="container">
 
@@ -78,8 +82,8 @@
 
                 Привіт,
                 <span th:text="${username}">
-                    User
-                </span>
+                User
+            </span>
                 👋
 
             </h1>
@@ -114,12 +118,11 @@
 
             <div>
 
-                <span class="stat-title">
-                    Всього книг
-                </span>
+            <span class="stat-title">
+                Всього книг
+            </span>
 
-                <strong
-                        th:text="${totalBooks}">
+                <strong th:text="${totalBooks}">
                     0
                 </strong>
 
@@ -136,12 +139,11 @@
 
             <div>
 
-                <span class="stat-title">
-                    Прочитано
-                </span>
+            <span class="stat-title">
+                Прочитано
+            </span>
 
-                <strong
-                        th:text="${readBooks}">
+                <strong th:text="${readBooks}">
                     0
                 </strong>
 
@@ -158,12 +160,11 @@
 
             <div>
 
-                <span class="stat-title">
-                    Читаю зараз
-                </span>
+            <span class="stat-title">
+                Читаю зараз
+            </span>
 
-                <strong
-                        th:text="${readingBooks}">
+                <strong th:text="${readingBooks}">
                     0
                 </strong>
 
@@ -180,12 +181,11 @@
 
             <div>
 
-                <span class="stat-title">
-                    Улюблені
-                </span>
+            <span class="stat-title">
+                Улюблені
+            </span>
 
-                <strong
-                        th:text="${favoriteBooks}">
+                <strong th:text="${favoriteBooks}">
                     0
                 </strong>
 
@@ -308,21 +308,27 @@
 
         <div class="books-grid">
 
+            <!-- Книги -->
+
             <article
                     class="book-card"
                     th:each="book : ${recentBooks}">
 
                 <div class="book-cover">
 
+                    <!-- Є обкладинка -->
+
                     <img
-                            th:if="${book.coverPath != null}"
+                            th:if="${book.coverFileMetadata != null}"
                             th:src="@{/books/{id}/cover(id=${book.id})}"
                             th:alt="${book.title}"
                     >
 
+                    <!-- Немає обкладинки -->
+
                     <div
                             class="no-cover"
-                            th:unless="${book.coverPath != null}">
+                            th:unless="${book.coverFileMetadata != null}">
 
                         📖
 
@@ -333,22 +339,29 @@
 
                 <div class="book-info">
 
-                    <h3
-                            th:text="${book.title}">
+                    <h3 th:text="${book.title}">
                         Назва книги
                     </h3>
 
-                    <p
-                            th:text="${book.author}">
+                    <p th:text="${book.author}">
                         Автор
                     </p>
 
 
+                    <!-- Жанри -->
+
+                    <div
+                            class="genres"
+                            th:if="${book.bookGenre != null and !book.bookGenre.isEmpty()}">
+
                     <span
                             class="genre"
-                            th:text="${book.genre}">
+                            th:each="genre : ${book.bookGenre}"
+                            th:text="${genre}">
                         Жанр
                     </span>
+
+                    </div>
 
 
                     <a

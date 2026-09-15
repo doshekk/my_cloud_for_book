@@ -1,4 +1,4 @@
-package org.example.filecloud.dto;
+package org.example.filecloud.dto.user;
 
 public record LoginUser(
         String username,

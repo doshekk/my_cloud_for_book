@@ -1,8 +1,8 @@
-package org.example.filecloud.controller.repository;
+package org.example.filecloud.repository;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.example.filecloud.dao.User;
+import org.example.filecloud.dao.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

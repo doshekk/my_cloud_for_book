@@ -3,15 +3,17 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Мої книги</title>
+    <title>Мої книги — BookCloud</title>
 
     <link rel="stylesheet"
           th:href="@{/css/books.css}">
+
 </head>
 
 <body>
@@ -41,7 +43,7 @@
 
     <div class="user">
 
-        <span th:text="${user.username}">
+        <span th:text="${username}">
             Username
         </span>
 
@@ -63,7 +65,7 @@
             </h1>
 
             <p>
-                Книги, які ви прочитали
+                Ваша особиста бібліотека
             </p>
 
         </div>
@@ -102,14 +104,14 @@
                 <option
                         th:each="genre : ${genres}"
                         th:value="${genre}"
-                        th:text="${genre}"
+                        th:text="${genre.ukrainianName}"
                         th:selected="${genre == selectedGenre}">
                 </option>
 
             </select>
 
             <button type="submit">
-                Пошук
+                🔎 Пошук
             </button>
 
         </form>
@@ -121,8 +123,6 @@
 
     <section class="books">
 
-        <!-- Одна книга -->
-
         <article
                 class="book-card"
                 th:each="book : ${books}">
@@ -132,14 +132,14 @@
             <div class="book-cover">
 
                 <img
-                        th:if="${book.coverPath != null}"
+                        th:if="${book.coverFileMetadata != null}"
                         th:src="@{/books/{id}/cover(id=${book.id})}"
                         th:alt="${book.title}"
                 >
 
                 <div
                         class="no-cover"
-                        th:unless="${book.coverPath != null}">
+                        th:unless="${book.coverFileMetadata != null}">
 
                     📖
 
@@ -152,41 +152,100 @@
 
             <div class="book-content">
 
-                <h2
-                        th:text="${book.title}">
-                    Назва книги
-                </h2>
+                <div class="book-title-row">
+
+                    <h2 th:text="${book.title}">
+                        Назва книги
+                    </h2>
+
+                    <!-- Улюблена -->
+
+                    <form th:action="@{/books/{id}/favorite(id=${book.id})}"
+                          method="post">
+
+                        <button
+                                type="submit"
+                                class="favorite-button"
+                                th:classappend="${book.favorite} ? 'favorite-active' : ''"
+                                th:title="${book.favorite} ? 'Прибрати з улюблених' : 'Додати в улюблені'">
+
+                            <span th:text="${book.favorite ? '★' : '☆'}">
+                                ☆
+                            </span>
+
+                        </button>
+
+                    </form>
+
+                </div>
 
 
-                <p
-                        class="author"
-                        th:text="${book.author}">
+                <p class="author"
+                   th:text="${book.author}">
                     Автор
                 </p>
 
 
-                <div class="tags">
+                <!-- Жанри -->
+
+                <div class="tags"
+                     th:if="${book.bookGenre != null}">
 
                     <span
                             class="tag genre"
-                            th:text="${book.genre}">
-                        Fantasy
-                    </span>
+                            th:each="genre : ${book.bookGenre}"
+                            th:text="${genre.ukrainianName}">
 
-                    <span class="tag read">
-                        ✓ Прочитано
+                        Жанр
+
                     </span>
 
                 </div>
 
 
-                <div class="date">
+                <!-- Статус -->
 
-                    Прочитано:
+                <div class="status">
 
                     <span
-                            th:text="${#temporals.format(book.readAt, 'dd.MM.yyyy')}">
+                            class="tag read"
+                            th:if="${book.readStatus.name() == 'READ'}">
+
+                        ✓ Прочитано
+
+                    </span>
+
+                    <span
+                            class="tag reading"
+                            th:if="${book.readStatus.name() == 'READING'}">
+
+                        📖 Читаю
+
+                    </span>
+
+                    <span
+                            class="tag planned"
+                            th:if="${book.readStatus.name() == 'PLANNED'}">
+
+                        📚 Заплановано
+
+                    </span>
+
+                </div>
+
+
+                <!-- Дата додавання -->
+
+                <div class="date"
+                     th:if="${book.addTime != null}">
+
+                    Додано:
+
+                    <span
+                            th:text="${#temporals.format(book.addTime, 'dd.MM.yyyy')}">
+
                         21.08.2026
+
                     </span>
 
                 </div>
@@ -196,22 +255,31 @@
 
                 <div class="actions">
 
-                    <a
-                            th:href="@{/books/{id}/read(id=${book.id})}"
-                            class="open">
-
+                    <a th:href="@{/books/{id}/read(id=${book.id})}"
+                       class="open">
                         Відкрити
-
                     </a>
 
-
-                    <a
-                            th:href="@{/books/{id}/download(id=${book.id})}"
-                            class="download">
-
+                    <a th:href="@{/books/{id}/download(id=${book.id})}"
+                       class="download">
                         Завантажити
-
                     </a>
+
+                    <a th:href="@{/books/{id}/edit(id=${book.id})}"
+                       class="edit">
+                        Редагувати
+                    </a>
+
+                    <form th:action="@{/books/{id}/delete(id=${book.id})}"
+                          method="post">
+
+                        <button type="submit"
+                                class="delete"
+                                onclick="return confirm('Ви впевнені, що хочете видалити цю книгу?');">
+                            Видалити
+                        </button>
+
+                    </form>
 
                 </div>
 
@@ -231,7 +299,7 @@
             </div>
 
             <h2>
-                У вас ще немає прочитаних книг
+                У вас ще немає книг
             </h2>
 
             <p>
@@ -239,7 +307,7 @@
             </p>
 
             <a th:href="@{/books/upload}">
-                Додати книгу
+                + Додати книгу
             </a>
 
         </div>

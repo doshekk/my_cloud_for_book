@@ -1,8 +1,8 @@
 package org.example.filecloud.security;
 
-import org.example.filecloud.controller.repository.UserRepository;
-import org.example.filecloud.dao.User;
-import org.example.filecloud.service.CustomUserDetail;
+import org.example.filecloud.repository.UserRepository;
+import org.example.filecloud.dao.user.User;
+import org.example.filecloud.service.auth.CustomUserDetail;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

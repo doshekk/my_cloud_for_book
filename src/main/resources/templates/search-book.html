@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Пошук — FileCloud</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/book-search.css}">
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="logo">
+            📚 FileCloud
+        </div>
+
+        <a th:href="@{/books}"
+           class="back-button">
+
+            ← Назад до книг
+
+        </a>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="content">
+
+        <!-- SEARCH -->
+
+        <div class="search-card">
+
+            <div class="search-header">
+
+                <h1>
+                    Пошук
+                </h1>
+
+                <p>
+                    Знайдіть книги, авторів або серії
+                </p>
+
+            </div>
+
+
+            <form th:action="@{/search}"
+                  method="post"
+                  class="search-form">
+
+                <div class="form-group">
+
+                    <label for="query">
+                        Пошуковий запит
+                    </label>
+
+                    <input
+                            type="text"
+                            id="query"
+                            name="query"
+                            th:value="${query}"
+                            placeholder="Наприклад: Гра престолів"
+                            autocomplete="off"
+                            required>
+
+                </div>
+
+
+                <button
+                        type="submit"
+                        class="search-button">
+
+                    🔍 Знайти
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <section class="results"
+                 th:if="${books != null or serias != null or authors != null}">
+
+            <!-- RESULTS HEADER -->
+
+            <div class="results-header">
+
+                <div>
+
+                    <h2>
+                        Результати пошуку
+                    </h2>
+
+                    <p th:if="${query != null}"
+                       th:text="'Результати для: ' + ${query}">
+
+                        Результати пошуку
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ===================== -->
+            <!-- BOOKS -->
+            <!-- ===================== -->
+
+            <section class="result-section"
+                     th:if="${books != null}">
+
+                <div class="section-header">
+
+                    <h2>
+                        📖 Книги
+                    </h2>
+
+                    <span class="results-count"
+                          th:text="'Знайдено: ' + ${totalBooks}">
+
+                        Знайдено: 0
+
+                    </span>
+
+                </div>
+
+
+                <div class="book-grid">
+
+                    <article
+                            class="book-card"
+                            th:each="book : ${books}">
+
+                        <!-- BOOK ICON -->
+
+                        <div class="book-cover">
+
+                            <div class="book-icon">
+                                📖
+                            </div>
+
+                        </div>
+
+
+                        <!-- BOOK INFO -->
+
+                        <div class="book-info">
+
+                            <!-- TITLE -->
+
+                            <h3 class="book-title"
+                                th:text="${book.title}">
+
+                                Назва книги
+
+                            </h3>
+
+
+                            <!-- AUTHOR -->
+
+                            <p th:if="${book.author != null}"
+                               th:text="${book.author}">
+
+                                Автор
+
+                            </p>
+
+
+                            <!-- BOOK LINK -->
+
+                            <div class="book-actions">
+
+                                <a
+                                        th:if="${book.bookId != null}"
+                                        class="details-button"
+                                        th:href="@{/book/{id}(id=${book.bookId})}"
+                                        target="_blank">
+
+                                    📖 Відкрити книгу
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- EMPTY BOOKS -->
+
+                <div class="empty"
+                     th:if="${#lists.isEmpty(books)}">
+
+                    <div class="empty-icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Книги не знайдено
+                    </h3>
+
+                    <p>
+                        Спробуйте змінити пошуковий запит.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ===================== -->
+            <!-- SERIES -->
+            <!-- ===================== -->
+
+            <section class="result-section"
+                     th:if="${serias != null}">
+
+                <div class="section-header">
+
+                    <h2>
+                        📚 Серії книг
+                    </h2>
+
+                    <span class="results-count"
+                          th:text="'Знайдено: ' + ${totalSerias}">
+
+                        Знайдено: 0
+
+                    </span>
+
+                </div>
+
+
+                <div class="series-grid">
+
+                    <article
+                            class="series-card"
+                            th:each="series : ${serias}">
+
+                        <div class="series-icon">
+                            📚
+                        </div>
+
+
+                        <div class="series-info">
+
+                            <!-- SERIES NAME -->
+
+                            <h3 class="series-title"
+                                th:text="${series.count}">
+
+                                Назва серії
+
+                            </h3>
+
+
+                            <!-- SERIES LINK -->
+
+                            <a
+                                    th:if="${series.id != null}"
+                                    class="series-button"
+                                    th:href="@{/serias/{id}(id=${series.id})}"
+                                    target="_blank">
+
+                                🔗 Відкрити серію
+
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- EMPTY SERIES -->
+
+                <div class="empty"
+                     th:if="${#lists.isEmpty(serias)}">
+
+                    <div class="empty-icon">
+                        📚
+                    </div>
+
+                    <h3>
+                        Серій не знайдено
+                    </h3>
+
+                    <p>
+                        Спробуйте змінити пошуковий запит.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ===================== -->
+            <!-- AUTHORS -->
+            <!-- ===================== -->
+
+            <section class="result-section"
+                     th:if="${authors != null}">
+
+                <div class="section-header">
+
+                    <h2>
+                        👤 Автори
+                    </h2>
+
+                    <span class="results-count"
+                          th:text="'Знайдено: ' + ${totalAuthors}">
+
+                        Знайдено: 0
+
+                    </span>
+
+                </div>
+
+
+                <div class="authors-grid">
+
+                    <article
+                            class="author-card"
+                            th:each="author : ${authors}">
+
+                        <div class="author-icon">
+                            👤
+                        </div>
+
+
+                        <div class="author-info">
+
+                            <!-- AUTHOR NAME -->
+
+                            <h3 class="author-title"
+                                th:text="${author.name}">
+
+                                Автор
+
+                            </h3>
+
+
+                            <!-- AUTHOR LINK -->
+
+                            <a
+                                    th:if="${author.id != null}"
+                                    class="author-button"
+                                    th:href="@{/author/{id}(id=${author.id})}"
+                                    target="_blank">
+
+                                🔗 Відкрити автора
+
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- EMPTY AUTHORS -->
+
+                <div class="empty"
+                     th:if="${#lists.isEmpty(authors)}">
+
+                    <div class="empty-icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Авторів не знайдено
+                    </h3>
+
+                    <p>
+                        Спробуйте змінити пошуковий запит.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
+

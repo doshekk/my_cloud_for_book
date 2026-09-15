@@ -1,6 +1,8 @@
-package org.example.filecloud.dao;
+package org.example.filecloud.dao.user;
 
 import jakarta.persistence.*;
+
+import java.nio.file.Path;
 
 @Entity
 @Table(name = "users")

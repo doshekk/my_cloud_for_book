@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${book.title} + ' — BookCloud'">
+        Читання — BookCloud
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/read-book.css}">
+
+</head>
+
+<body>
+
+<header class="reader-header">
+
+    <div class="reader-left">
+
+        <a th:href="@{/books}"
+           class="back-button">
+            ← Назад
+        </a>
+
+        <div class="book-title">
+
+            <strong th:text="${book.title}">
+                Назва книги
+            </strong>
+
+            <span th:text="${book.author}">
+                Автор
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="reader-actions">
+
+        <a th:href="@{/books/{id}/file(id=${book.id})}"
+           class="download-button"
+           download>
+            ↓ Завантажити
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="reader-container">
+
+    <!-- Інформація про книгу -->
+
+    <section class="book-info">
+
+        <div class="cover">
+
+            <img th:if="${book.coverFileMetadata != null}"
+                 th:src="@{/books/{id}/cover(id=${book.id})}"
+                 th:alt="${book.title}">
+
+            <div th:unless="${book.coverFileMetadata != null}"
+                 class="no-cover">
+                📖
+            </div>
+
+        </div>
+
+
+        <div class="details">
+
+            <h1 th:text="${book.title}">
+                Назва книги
+            </h1>
+
+            <p class="author"
+               th:text="${book.author}">
+                Автор
+            </p>
+
+
+            <div class="genres"
+                 th:if="${book.bookGenre != null}">
+
+                <span class="genre"
+                      th:each="genre : ${book.bookGenre}"
+                      th:text="${genre.ukrainianName}">
+                    Жанр
+                </span>
+
+            </div>
+
+
+            <p class="description"
+               th:if="${book.description != null}"
+               th:text="${book.description}">
+                Опис книги
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- PDF -->
+
+    <section class="reader">
+
+        <div class="reader-header-inner">
+
+            <h2>
+                Читання
+            </h2>
+
+            <div class="reader-controls">
+
+                <span class="file-type">
+                    PDF
+                </span>
+
+                <button type="button"
+                        class="fullscreen-button"
+                        onclick="toggleFullscreen()">
+                    ⛶ На весь екран
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="pdf-container"
+             id="pdfContainer"
+             th:if="${book.fileMetadata != null}">
+
+            <iframe
+                    th:src="@{/books/{id}/file(id=${book.id})}"
+                    class="pdf-viewer"
+                    title="Перегляд книги">
+            </iframe>
+
+        </div>
+
+
+        <div class="file-not-found"
+             th:unless="${book.fileMetadata != null}">
+
+            <div class="file-icon">
+                📄
+            </div>
+
+            <h2>
+                Файл книги відсутній
+            </h2>
+
+            <p>
+                Для цієї книги не знайдено завантажений файл.
+            </p>
+
+            <a th:href="@{/books}"
+               class="primary-button">
+                Повернутися до бібліотеки
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    function toggleFullscreen() {
+
+        const container = document.getElementById("pdfContainer");
+
+        if (!container) {
+            return;
+        }
+
+        if (!document.fullscreenElement) {
+
+            container.requestFullscreen()
+                .catch(error => {
+                    console.error(
+                        "Не вдалося відкрити повноекранний режим:",
+                        error
+                    );
+                });
+
+        } else {
+
+            document.exitFullscreen();
+
+        }
+    }
+
+
+    document.addEventListener("fullscreenchange", function () {
+
+        const button = document.querySelector(".fullscreen-button");
+
+        if (!button) {
+            return;
+        }
+
+        if (document.fullscreenElement) {
+
+            button.textContent = "✕ Вийти з повного екрану";
+
+        } else {
+
+            button.textContent = "⛶ На весь екран";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

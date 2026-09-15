@@ -1,0 +1,510 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    background: #f5f6fa;
+    color: #20222a;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    height: 70px;
+
+    background: rgba(255, 255, 255, 0.9);
+
+    border-bottom: 1px solid #e5e7eb;
+
+    backdrop-filter: blur(12px);
+}
+
+.header-container {
+    max-width: 1100px;
+
+    height: 100%;
+
+    margin: 0 auto;
+
+    padding: 0 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.logo {
+    color: #6d4aff;
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+.back-link {
+    color: #555b6e;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.back-link:hover {
+    color: #6d4aff;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.author-page {
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 45px 24px 70px;
+}
+
+
+/* =========================
+   AUTHOR HEADER
+========================= */
+
+.author-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    padding: 30px;
+
+    margin-bottom: 45px;
+
+    background: white;
+
+    border: 1px solid #e7e8ef;
+
+    border-radius: 20px;
+
+    box-shadow: 0 8px 30px rgba(30, 30, 50, 0.05);
+}
+
+.author-avatar {
+    width: 100px;
+    height: 100px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+            135deg,
+            #7657ff,
+            #9b82ff
+    );
+
+    color: white;
+
+    font-size: 40px;
+
+    font-weight: 800;
+}
+
+.author-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8b90a0;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+}
+
+.author-info h1 {
+    margin: 0 0 18px;
+
+    font-size: 32px;
+
+    line-height: 1.2;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.author-stats {
+    display: flex;
+
+    gap: 30px;
+}
+
+.stat {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 7px;
+}
+
+.stat strong {
+    font-size: 20px;
+
+    color: #6d4aff;
+}
+
+.stat span {
+    color: #777d8d;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    margin: 0;
+
+    font-size: 25px;
+}
+
+.section-header > span {
+    min-width: 28px;
+    height: 28px;
+
+    padding: 0 8px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #ece8ff;
+
+    color: #6d4aff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   SERIES
+========================= */
+
+.series-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.series-card {
+    background: white;
+
+    border: 1px solid #e7e8ef;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow: 0 6px 25px rgba(30, 30, 50, 0.04);
+}
+
+.series-card-header {
+    padding: 22px 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #eeeeF3;
+}
+
+.series-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #9297a6;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.07em;
+}
+
+.series-card h3 {
+    margin: 0;
+
+    font-size: 20px;
+}
+
+.books-count {
+    padding: 7px 11px;
+
+    border-radius: 8px;
+
+    background: #f1efff;
+
+    color: #6d4aff;
+
+    white-space: nowrap;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   BOOKS
+========================= */
+
+.books-list {
+    display: flex;
+
+    flex-direction: column;
+}
+
+.book {
+    min-height: 75px;
+
+    padding: 15px 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid #f0f0f4;
+
+    transition:
+            background 0.2s,
+            padding 0.2s;
+}
+
+.book:last-child {
+    border-bottom: none;
+}
+
+.book:hover {
+    background: #faf9ff;
+
+    padding-left: 30px;
+}
+
+.book-number {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #f0edff;
+
+    color: #6d4aff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.book-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.book-info h4 {
+    margin: 0 0 6px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+.translators {
+    color: #7d8290;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.translator-label {
+    color: #9a9eaa;
+}
+
+.translator {
+    color: #6d4aff;
+}
+
+.book-arrow {
+    color: #aaaebb;
+
+    font-size: 20px;
+
+    transition: 0.2s;
+}
+
+.book:hover .book-arrow {
+    color: #6d4aff;
+
+    transform: translateX(3px);
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty {
+    padding: 50px 25px;
+
+    text-align: center;
+
+    background: white;
+
+    border: 1px solid #e7e8ef;
+
+    border-radius: 18px;
+}
+
+.empty h3 {
+    margin: 0 0 8px;
+
+    font-size: 18px;
+}
+
+.empty p {
+    margin: 0;
+
+    color: #858a98;
+
+    font-size: 14px;
+}
+
+.no-books {
+    padding: 20px 25px;
+
+    color: #9297a6;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    .author-page {
+        padding: 25px 15px 50px;
+    }
+
+    .author-header {
+        padding: 22px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .author-avatar {
+        width: 75px;
+        height: 75px;
+
+        font-size: 30px;
+    }
+
+    .author-info h1 {
+        font-size: 26px;
+    }
+
+    .series-card-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .book {
+        padding: 14px 15px;
+    }
+
+    .book:hover {
+        padding-left: 15px;
+    }
+
+    .book-arrow {
+        display: none;
+    }
+}
