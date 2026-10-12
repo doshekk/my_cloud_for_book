@@ -7,227 +7,1915 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-    <title th:text="${book.title} + ' — BookCloud'">
-        Читання — BookCloud
+    <title th:text="${book.title}">
+        Читання книги
     </title>
 
     <link rel="stylesheet"
           th:href="@{/css/read-book.css}">
 
+    <!-- JSZip -->
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
 </head>
+
 
 <body>
 
-<header class="reader-header">
+<div class="reader-page">
 
-    <div class="reader-left">
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="reader-header">
 
         <a th:href="@{/books}"
            class="back-button">
+
             ← Назад
+
         </a>
+
 
         <div class="book-title">
 
-            <strong th:text="${book.title}">
+            <span th:text="${book.title}">
                 Назва книги
-            </strong>
-
-            <span th:text="${book.author}">
-                Автор
             </span>
 
         </div>
 
-    </div>
+    </header>
 
 
-    <div class="reader-actions">
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
 
-        <a th:href="@{/books/{id}/file(id=${book.id})}"
-           class="download-button"
-           download>
-            ↓ Завантажити
-        </a>
-
-    </div>
-
-</header>
+    <main class="reader-main">
 
 
-<main class="reader-container">
+        <!-- =================================================
+             EPUB
+             ================================================= -->
 
-    <!-- Інформація про книгу -->
+        <div id="epubContainer"
+             class="epub-container"
+             th:if="${fileType == 'epub'}">
 
-    <section class="book-info">
+            <div id="epubViewer"
+                 class="epub-viewer">
 
-        <div class="cover">
+                <div class="reader-loading">
 
-            <img th:if="${book.coverFileMetadata != null}"
-                 th:src="@{/books/{id}/cover(id=${book.id})}"
-                 th:alt="${book.title}">
+                    <div class="loading-spinner"></div>
 
-            <div th:unless="${book.coverFileMetadata != null}"
-                 class="no-cover">
-                📖
-            </div>
+                    <div>
+                        Завантаження книги...
+                    </div>
 
-        </div>
-
-
-        <div class="details">
-
-            <h1 th:text="${book.title}">
-                Назва книги
-            </h1>
-
-            <p class="author"
-               th:text="${book.author}">
-                Автор
-            </p>
-
-
-            <div class="genres"
-                 th:if="${book.bookGenre != null}">
-
-                <span class="genre"
-                      th:each="genre : ${book.bookGenre}"
-                      th:text="${genre.ukrainianName}">
-                    Жанр
-                </span>
-
-            </div>
-
-
-            <p class="description"
-               th:if="${book.description != null}"
-               th:text="${book.description}">
-                Опис книги
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- PDF -->
-
-    <section class="reader">
-
-        <div class="reader-header-inner">
-
-            <h2>
-                Читання
-            </h2>
-
-            <div class="reader-controls">
-
-                <span class="file-type">
-                    PDF
-                </span>
-
-                <button type="button"
-                        class="fullscreen-button"
-                        onclick="toggleFullscreen()">
-                    ⛶ На весь екран
-                </button>
+                </div>
 
             </div>
 
         </div>
 
+
+        <!-- =================================================
+             PDF
+             ================================================= -->
 
         <div class="pdf-container"
-             id="pdfContainer"
-             th:if="${book.fileMetadata != null}">
+             th:if="${fileType == 'pdf'}">
 
             <iframe
                     th:src="@{/books/{id}/file(id=${book.id})}"
-                    class="pdf-viewer"
-                    title="Перегляд книги">
+                    class="pdf-viewer">
             </iframe>
 
         </div>
 
 
-        <div class="file-not-found"
-             th:unless="${book.fileMetadata != null}">
+        <!-- =================================================
+             UNKNOWN
+             ================================================= -->
 
-            <div class="file-icon">
-                📄
-            </div>
+        <div class="reader-error"
+             th:if="${fileType != 'epub' and fileType != 'pdf'}">
 
-            <h2>
-                Файл книги відсутній
-            </h2>
-
-            <p>
-                Для цієї книги не знайдено завантажений файл.
-            </p>
-
-            <a th:href="@{/books}"
-               class="primary-button">
-                Повернутися до бібліотеки
-            </a>
+            Формат книги не підтримується для читання.
 
         </div>
 
-    </section>
 
-</main>
+    </main>
+
+</div>
 
 
-<script>
+<script th:inline="javascript">
 
-    function toggleFullscreen() {
+    /*
+     * =========================================================
+     * BOOK ID
+     * =========================================================
+     */
 
-        const container = document.getElementById("pdfContainer");
+    const bookId = /*[[${book.id}]]*/ 0;
 
-        if (!container) {
-            return;
+
+    /*
+     * =========================================================
+     * GLOBAL
+     * =========================================================
+     */
+
+    let zip = null;
+
+    let objectUrls = [];
+
+    let currentBookSettings = null;
+
+
+    /*
+     * =========================================================
+     * READER SETTINGS
+     * =========================================================
+     */
+
+    function getReaderSettings() {
+
+        const width = window.innerWidth;
+
+
+        /*
+         * Маленький телефон
+         */
+
+        if (width <= 400) {
+
+            return {
+
+                fontSize: "14px",
+
+                lineHeight: "1.55",
+
+                paddingTop: "18px",
+
+                paddingRight: "14px",
+
+                paddingBottom: "18px",
+
+                paddingLeft: "14px"
+
+            };
+
         }
 
-        if (!document.fullscreenElement) {
 
-            container.requestFullscreen()
-                .catch(error => {
-                    console.error(
-                        "Не вдалося відкрити повноекранний режим:",
-                        error
-                    );
-                });
+        /*
+         * Звичайний телефон
+         */
 
-        } else {
+        if (width <= 700) {
 
-            document.exitFullscreen();
+            return {
+
+                fontSize: "15px",
+
+                lineHeight: "1.6",
+
+                paddingTop: "22px",
+
+                paddingRight: "16px",
+
+                paddingBottom: "22px",
+
+                paddingLeft: "16px"
+
+            };
 
         }
+
+
+        /*
+         * Планшет / ПК
+         */
+
+        return {
+
+            fontSize: "18px",
+
+            lineHeight: "1.7",
+
+            paddingTop: "45px",
+
+            paddingRight: "55px",
+
+            paddingBottom: "45px",
+
+            paddingLeft: "55px"
+
+        };
+
     }
 
 
-    document.addEventListener("fullscreenchange", function () {
+    /*
+     * =========================================================
+     * PATH HELPERS
+     * =========================================================
+     */
 
-        const button = document.querySelector(".fullscreen-button");
+    function normalizePath(path) {
 
-        if (!button) {
-            return;
+        if (!path) {
+            return "";
         }
 
-        if (document.fullscreenElement) {
 
-            button.textContent = "✕ Вийти з повного екрану";
+        path = path.replace(/\\/g, "/");
+
+
+        const parts = [];
+
+        for (const part of path.split("/")) {
+
+            if (!part || part === ".") {
+                continue;
+            }
+
+
+            if (part === "..") {
+
+                parts.pop();
+
+            } else {
+
+                parts.push(part);
+
+            }
+
+        }
+
+
+        return parts.join("/");
+
+    }
+
+
+    function getDirectory(path) {
+
+        const index = path.lastIndexOf("/");
+
+        if (index === -1) {
+            return "";
+        }
+
+        return path.substring(0, index + 1);
+
+    }
+
+
+    function resolvePath(baseFile, relativePath) {
+
+        if (!relativePath) {
+            return "";
+        }
+
+
+        /*
+         * data: / http: / https:
+         */
+
+        if (
+            relativePath.startsWith("data:") ||
+            relativePath.startsWith("http://") ||
+            relativePath.startsWith("https://") ||
+            relativePath.startsWith("#")
+        ) {
+
+            return relativePath;
+
+        }
+
+
+        /*
+         * Прибираємо query/hash
+         */
+
+        const cleanPath =
+            relativePath.split("#")[0].split("?")[0];
+
+
+        const baseDirectory =
+            getDirectory(baseFile);
+
+
+        return normalizePath(
+            baseDirectory + cleanPath
+        );
+
+    }
+
+
+    /*
+     * =========================================================
+     * FIND EPUB OPF
+     * =========================================================
+     */
+
+    async function findOpfPath() {
+
+        const containerFile =
+            zip.file("META-INF/container.xml");
+
+
+        if (!containerFile) {
+
+            throw new Error(
+                "У EPUB відсутній META-INF/container.xml"
+            );
+
+        }
+
+
+        const containerXml =
+            await containerFile.async("text");
+
+
+        const parser =
+            new DOMParser();
+
+
+        const xml =
+            parser.parseFromString(
+                containerXml,
+                "application/xml"
+            );
+
+
+        const rootfile =
+            xml.querySelector("rootfile");
+
+
+        if (!rootfile) {
+
+            throw new Error(
+                "Не знайдено OPF-файл EPUB"
+            );
+
+        }
+
+
+        const fullPath =
+            rootfile.getAttribute("full-path");
+
+
+        if (!fullPath) {
+
+            throw new Error(
+                "OPF-файл не має full-path"
+            );
+
+        }
+
+
+        return normalizePath(fullPath);
+
+    }
+
+
+    /*
+     * =========================================================
+     * LOAD OPF
+     * =========================================================
+     */
+
+    async function loadOpf(opfPath) {
+
+        const opfFile =
+            zip.file(opfPath);
+
+
+        if (!opfFile) {
+
+            throw new Error(
+                "Не знайдено OPF: " + opfPath
+            );
+
+        }
+
+
+        const opfText =
+            await opfFile.async("text");
+
+
+        const parser =
+            new DOMParser();
+
+
+        const opf =
+            parser.parseFromString(
+                opfText,
+                "application/xml"
+            );
+
+
+        return opf;
+
+    }
+
+
+    /*
+     * =========================================================
+     * BUILD MANIFEST
+     * =========================================================
+     */
+
+    function buildManifest(opf) {
+
+        const manifest = {};
+
+        const items =
+            opf.querySelectorAll("manifest > item");
+
+
+        items.forEach(item => {
+
+            const id =
+                item.getAttribute("id");
+
+
+            const href =
+                item.getAttribute("href");
+
+
+            const mediaType =
+                item.getAttribute("media-type");
+
+
+            const properties =
+                item.getAttribute("properties") || "";
+
+
+            if (!id || !href) {
+                return;
+            }
+
+
+            manifest[id] = {
+
+                id: id,
+
+                href: href,
+
+                mediaType: mediaType,
+
+                properties: properties
+
+            };
+
+        });
+
+
+        return manifest;
+
+    }
+
+
+    /*
+     * =========================================================
+     * GET SPINE
+     * =========================================================
+     */
+
+    function getSpine(opf) {
+
+        const spine =
+            opf.querySelector("spine");
+
+
+        if (!spine) {
+
+            throw new Error(
+                "У EPUB відсутній spine"
+            );
+
+        }
+
+
+        const result = [];
+
+
+        spine.querySelectorAll(":scope > itemref")
+            .forEach(itemref => {
+
+                const idref =
+                    itemref.getAttribute("idref");
+
+
+                if (idref) {
+
+                    result.push(idref);
+
+                }
+
+            });
+
+
+        return result;
+
+    }
+
+
+    /*
+     * =========================================================
+     * CREATE OBJECT URL
+     * =========================================================
+     */
+
+    async function createObjectUrl(path) {
+
+        const file =
+            zip.file(path);
+
+
+        if (!file) {
+            return null;
+        }
+
+
+        const blob =
+            await file.async("blob");
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        objectUrls.push(url);
+
+
+        return url;
+
+    }
+
+
+    /*
+     * =========================================================
+     * REPLACE IMAGES
+     * =========================================================
+     */
+
+    async function processImages(doc, xhtmlPath) {
+
+        const images =
+            doc.querySelectorAll("img");
+
+
+        for (const img of images) {
+
+            const src =
+                img.getAttribute("src");
+
+
+            if (!src) {
+                continue;
+            }
+
+
+            if (
+                src.startsWith("data:") ||
+                src.startsWith("http://") ||
+                src.startsWith("https://")
+            ) {
+
+                continue;
+
+            }
+
+
+            const imagePath =
+                resolvePath(
+                    xhtmlPath,
+                    src
+                );
+
+
+            const url =
+                await createObjectUrl(imagePath);
+
+
+            if (url) {
+
+                img.setAttribute(
+                    "src",
+                    url
+                );
+
+            } else {
+
+                /*
+                 * Якщо картинку не знайшли,
+                 * прибираємо битий src.
+                 */
+
+                img.removeAttribute("src");
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * =========================================================
+     * REMOVE FONT REFERENCES
+     * =========================================================
+     */
+
+    function removeFontReferences(doc) {
+
+        /*
+         * Видаляємо style з @font-face.
+         */
+
+        doc.querySelectorAll("style")
+            .forEach(style => {
+
+                const text =
+                    style.textContent || "";
+
+
+                if (
+                    text.toLowerCase()
+                        .includes("@font-face")
+                ) {
+
+                    /*
+                     * Видаляємо тільки @font-face,
+                     * а не весь CSS.
+                     */
+
+                    style.textContent =
+                        text.replace(
+                            /@font-face\s*\{[\s\S]*?\}/gi,
+                            ""
+                        );
+
+                }
+
+            });
+
+
+        /*
+         * Видаляємо <link stylesheet>,
+         * щоб EPUB CSS не підтягував
+         * проблемні шрифти.
+         */
+
+        doc.querySelectorAll(
+            "link[rel='stylesheet']"
+        ).forEach(link => {
+
+            link.remove();
+
+        });
+
+
+        /*
+         * Видаляємо inline font-family.
+         */
+
+        doc.querySelectorAll("[style]")
+            .forEach(element => {
+
+                const oldStyle =
+                    element.getAttribute("style");
+
+
+                if (!oldStyle) {
+                    return;
+                }
+
+
+                const newStyle =
+                    oldStyle.replace(
+                        /font-family\s*:[^;]+;?/gi,
+                        ""
+                    );
+
+
+                if (newStyle.trim()) {
+
+                    element.setAttribute(
+                        "style",
+                        newStyle
+                    );
+
+                } else {
+
+                    element.removeAttribute(
+                        "style"
+                    );
+
+                }
+
+            });
+
+    }
+
+
+    /*
+     * =========================================================
+     * REMOVE EPUB PAGE LAYOUT
+     * =========================================================
+     */
+
+    function cleanDocument(doc) {
+
+        /*
+         * Видаляємо head.
+         *
+         * Нам не потрібен CSS EPUB,
+         * бо стиль задаємо самі.
+         */
+
+        if (doc.head) {
+
+            doc.head
+                .querySelectorAll(
+                    "style, link, meta, title"
+                )
+                .forEach(element => {
+
+                    element.remove();
+
+                });
+
+        }
+
+
+        /*
+         * Прибираємо старі стилі.
+         */
+
+        removeFontReferences(doc);
+
+
+        /*
+         * Видаляємо службові елементи.
+         */
+
+        doc.querySelectorAll(
+            "script, iframe, object, embed"
+        ).forEach(element => {
+
+            element.remove();
+
+        });
+
+
+        /*
+         * Прибираємо page-break,
+         * які можуть створювати дивні
+         * розриви сторінок.
+         */
+
+        doc.querySelectorAll("*")
+            .forEach(element => {
+
+                element.style.removeProperty(
+                    "page-break-before"
+                );
+
+                element.style.removeProperty(
+                    "page-break-after"
+                );
+
+                element.style.removeProperty(
+                    "break-before"
+                );
+
+                element.style.removeProperty(
+                    "break-after"
+                );
+
+            });
+
+    }
+
+
+    /*
+     * =========================================================
+     * LOAD XHTML
+     * =========================================================
+     */
+
+    async function loadChapter(
+        xhtmlPath,
+        chapterNumber
+    ) {
+
+        const file =
+            zip.file(xhtmlPath);
+
+
+        if (!file) {
+
+            console.warn(
+                "Не знайдено XHTML:",
+                xhtmlPath
+            );
+
+            return null;
+
+        }
+
+
+        const text =
+            await file.async("text");
+
+
+        const parser =
+            new DOMParser();
+
+
+        const doc =
+            parser.parseFromString(
+                text,
+                "application/xhtml+xml"
+            );
+
+
+        /*
+         * Якщо XML пошкоджений,
+         * пробуємо HTML parser.
+         */
+
+        if (
+            !doc ||
+            !doc.documentElement ||
+            doc.querySelector("parsererror")
+        ) {
+
+            console.warn(
+                "XHTML має помилки XML:",
+                xhtmlPath
+            );
+
+
+            const htmlDoc =
+                parser.parseFromString(
+                    text,
+                    "text/html"
+                );
+
+
+            await processImages(
+                htmlDoc,
+                xhtmlPath
+            );
+
+
+            cleanDocument(
+                htmlDoc
+            );
+
+
+            return createChapter(
+                htmlDoc,
+                chapterNumber
+            );
+
+        }
+
+
+        await processImages(
+            doc,
+            xhtmlPath
+        );
+
+
+        cleanDocument(
+            doc
+        );
+
+
+        return createChapter(
+            doc,
+            chapterNumber
+        );
+
+    }
+
+
+    /*
+     * =========================================================
+     * CREATE CHAPTER
+     * =========================================================
+     */
+
+    function createChapter(
+        doc,
+        chapterNumber
+    ) {
+
+        const chapter =
+            document.createElement("article");
+
+
+        chapter.className =
+            "book-chapter";
+
+
+        chapter.dataset.chapter =
+            chapterNumber;
+
+
+        /*
+         * Якщо є body —
+         * переносимо його вміст.
+         */
+
+        const body =
+            doc.body;
+
+
+        if (body) {
+
+            while (body.firstChild) {
+
+                chapter.appendChild(
+                    body.firstChild
+                );
+
+            }
 
         } else {
 
-            button.textContent = "⛶ На весь екран";
+            /*
+             * Для XHTML parser
+             * шукаємо body вручну.
+             */
+
+            const bodyElement =
+                doc.querySelector("body");
+
+
+            if (bodyElement) {
+
+                chapter.innerHTML =
+                    bodyElement.innerHTML;
+
+            } else {
+
+                chapter.innerHTML =
+                    doc.documentElement
+                        .innerHTML;
+
+            }
 
         }
 
-    });
+
+        return chapter;
+
+    }
+
+
+    /*
+     * =========================================================
+     * APPLY OUR READER STYLE
+     * =========================================================
+     */
+
+    function applyReaderStyle() {
+
+        const settings =
+            getReaderSettings();
+
+
+        currentBookSettings =
+            settings;
+
+
+        const oldStyle =
+            document.getElementById(
+                "filecloud-reader-style"
+            );
+
+
+        if (oldStyle) {
+
+            oldStyle.remove();
+
+        }
+
+
+        const style =
+            document.createElement("style");
+
+
+        style.id =
+            "filecloud-reader-style";
+
+
+        style.textContent = `
+
+            /*
+             * ==========================================
+             * ОСНОВНИЙ ТЕКСТ
+             * ==========================================
+             */
+
+            .book-chapter {
+
+                width:
+                    100%;
+
+                max-width:
+                    100%;
+
+                margin:
+                    0;
+
+                padding:
+                    ${settings.paddingTop}
+                    ${settings.paddingRight}
+                    ${settings.paddingBottom}
+                    ${settings.paddingLeft};
+
+                box-sizing:
+                    border-box;
+
+                background:
+                    #ffffff;
+
+                color:
+                    #222222;
+
+                font-family:
+                    Georgia,
+                    "Times New Roman",
+                    serif;
+
+                font-size:
+                    ${settings.fontSize};
+
+                line-height:
+                    ${settings.lineHeight};
+
+                overflow-wrap:
+                    break-word;
+
+                word-wrap:
+                    break-word;
+
+                overflow:
+                    visible;
+
+            }
+
+
+            /*
+             * ==========================================
+             * ВСІ ЕЛЕМЕНТИ
+             * ==========================================
+             */
+
+            .book-chapter * {
+
+                max-width:
+                    100%;
+
+                box-sizing:
+                    border-box;
+
+            }
+
+
+            /*
+             * ==========================================
+             * АБЗАЦИ
+             * ==========================================
+             */
+
+            .book-chapter p {
+
+                margin:
+                    0 0 0.85em 0;
+
+                padding:
+                    0;
+
+                font-family:
+                    Georgia,
+                    "Times New Roman",
+                    serif;
+
+                font-size:
+                    ${settings.fontSize};
+
+                line-height:
+                    ${settings.lineHeight};
+
+                text-align:
+                    left;
+
+                overflow-wrap:
+                    break-word;
+
+                word-wrap:
+                    break-word;
+
+            }
+
+
+            /*
+             * ==========================================
+             * ТЕКСТОВІ ELEMENTS
+             * ==========================================
+             */
+
+            .book-chapter span,
+            .book-chapter div,
+            .book-chapter section,
+            .book-chapter article {
+
+                font-family:
+                    Georgia,
+                    "Times New Roman",
+                    serif;
+
+            }
+
+
+            /*
+             * ==========================================
+             * ЗАГОЛОВКИ
+             * ==========================================
+             */
+
+            .book-chapter h1,
+            .book-chapter h2,
+            .book-chapter h3,
+            .book-chapter h4,
+            .book-chapter h5,
+            .book-chapter h6 {
+
+                font-family:
+                    Georgia,
+                    "Times New Roman",
+                    serif;
+
+                line-height:
+                    1.3;
+
+                margin-top:
+                    1.2em;
+
+                margin-bottom:
+                    0.7em;
+
+                overflow-wrap:
+                    break-word;
+
+                word-wrap:
+                    break-word;
+
+            }
+
+
+            .book-chapter h1 {
+
+                font-size:
+                    1.8em;
+
+            }
+
+
+            .book-chapter h2 {
+
+                font-size:
+                    1.6em;
+
+            }
+
+
+            .book-chapter h3 {
+
+                font-size:
+                    1.4em;
+
+            }
+
+
+            .book-chapter h4,
+            .book-chapter h5,
+            .book-chapter h6 {
+
+                font-size:
+                    1.2em;
+
+            }
+
+
+            /*
+             * ==========================================
+             * IMAGES
+             * ==========================================
+             */
+
+            .book-chapter img {
+
+                display:
+                    block;
+
+                width:
+                    auto;
+
+                max-width:
+                    100%;
+
+                height:
+                    auto;
+
+                margin:
+                    1.2em auto;
+
+                object-fit:
+                    contain;
+
+            }
+
+
+            /*
+             * ==========================================
+             * SVG
+             * ==========================================
+             */
+
+            .book-chapter svg {
+
+                max-width:
+                    100%;
+
+                height:
+                    auto;
+
+            }
+
+
+            /*
+             * ==========================================
+             * TABLE
+             * ==========================================
+             */
+
+            .book-chapter table {
+
+                width:
+                    100%;
+
+                max-width:
+                    100%;
+
+                border-collapse:
+                    collapse;
+
+                margin:
+                    1em 0;
+
+                table-layout:
+                    fixed;
+
+            }
+
+
+            .book-chapter td,
+            .book-chapter th {
+
+                padding:
+                    4px;
+
+                overflow-wrap:
+                    break-word;
+
+                word-wrap:
+                    break-word;
+
+            }
+
+
+            /*
+             * ==========================================
+             * LINKS
+             * ==========================================
+             */
+
+            .book-chapter a {
+
+                overflow-wrap:
+                    break-word;
+
+                word-wrap:
+                    break-word;
+
+            }
+
+
+            /*
+             * ==========================================
+             * CODE
+             * ==========================================
+             */
+
+            .book-chapter pre {
+
+                max-width:
+                    100%;
+
+                white-space:
+                    pre-wrap;
+
+                overflow-wrap:
+                    break-word;
+
+                word-wrap:
+                    break-word;
+
+            }
+
+
+            .book-chapter code {
+
+                white-space:
+                    pre-wrap;
+
+                overflow-wrap:
+                    break-word;
+
+            }
+
+
+            /*
+             * ==========================================
+             * QUOTES
+             * ==========================================
+             */
+
+            .book-chapter blockquote {
+
+                margin:
+                    1em 0;
+
+                padding:
+                    0 0 0 1em;
+
+                border-left:
+                    3px solid #d0d0d0;
+
+            }
+
+
+            /*
+             * ==========================================
+             * ПЕРШИЙ РОЗДІЛ
+             * ==========================================
+             */
+
+            .book-chapter:first-child {
+
+                padding-top:
+                    ${settings.paddingTop};
+
+            }
+
+
+            /*
+             * ==========================================
+             * ОСТАННІЙ РОЗДІЛ
+             * ==========================================
+             */
+
+            .book-chapter:last-child {
+
+                padding-bottom:
+                    80px;
+
+            }
+
+        `;
+
+
+        document.head.appendChild(
+            style
+        );
+
+    }
+
+
+    /*
+     * =========================================================
+     * UPDATE STYLE AFTER RESIZE
+     * =========================================================
+     */
+
+    function updateReaderStyle() {
+
+        applyReaderStyle();
+
+    }
+
+
+    /*
+     * =========================================================
+     * LOAD ENTIRE EPUB
+     * =========================================================
+     */
+
+    async function openEpub() {
+
+        const viewer =
+            document.getElementById(
+                "epubViewer"
+            );
+
+
+        if (!viewer) {
+            return;
+        }
+
+
+        try {
+
+            console.log(
+                "Початок завантаження EPUB..."
+            );
+
+
+            /*
+             * -----------------------------------------
+             * FETCH
+             * -----------------------------------------
+             */
+
+            const response =
+                await fetch(
+                    `/books/${bookId}/file`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            /*
+             * -----------------------------------------
+             * ARRAY BUFFER
+             * -----------------------------------------
+             */
+
+            const arrayBuffer =
+                await response.arrayBuffer();
+
+
+            console.log(
+                "EPUB завантажено:",
+                arrayBuffer.byteLength,
+                "bytes"
+            );
+
+
+            /*
+             * -----------------------------------------
+             * OPEN ZIP
+             * -----------------------------------------
+             */
+
+            zip =
+                await JSZip.loadAsync(
+                    arrayBuffer
+                );
+
+
+            console.log(
+                "EPUB ZIP успішно розпаковано"
+            );
+
+
+            /*
+             * -----------------------------------------
+             * FIND OPF
+             * -----------------------------------------
+             */
+
+            const opfPath =
+                await findOpfPath();
+
+
+            console.log(
+                "OPF:",
+                opfPath
+            );
+
+
+            /*
+             * -----------------------------------------
+             * LOAD OPF
+             * -----------------------------------------
+             */
+
+            const opf =
+                await loadOpf(
+                    opfPath
+                );
+
+
+            /*
+             * -----------------------------------------
+             * MANIFEST
+             * -----------------------------------------
+             */
+
+            const manifest =
+                buildManifest(
+                    opf
+                );
+
+
+            /*
+             * -----------------------------------------
+             * SPINE
+             * -----------------------------------------
+             */
+
+            const spine =
+                getSpine(
+                    opf
+                );
+
+
+            console.log(
+                "Розділів знайдено:",
+                spine.length
+            );
+
+
+            if (spine.length === 0) {
+
+                throw new Error(
+                    "У книзі не знайдено розділів"
+                );
+
+            }
+
+
+            /*
+             * -----------------------------------------
+             * CLEAN VIEWER
+             * -----------------------------------------
+             */
+
+            viewer.innerHTML = "";
+
+
+            /*
+             * -----------------------------------------
+             * APPLY STYLE
+             * -----------------------------------------
+             */
+
+            applyReaderStyle();
+
+
+            /*
+             * -----------------------------------------
+             * OPF DIRECTORY
+             * -----------------------------------------
+             */
+
+            const opfDirectory =
+                getDirectory(
+                    opfPath
+                );
+
+
+            /*
+             * -----------------------------------------
+             * LOAD EVERY CHAPTER
+             * -----------------------------------------
+             */
+
+            let loadedChapters = 0;
+
+
+            for (
+                let i = 0;
+                i < spine.length;
+                i++
+            ) {
+
+                const idref =
+                    spine[i];
+
+
+                const item =
+                    manifest[idref];
+
+
+                if (!item) {
+
+                    console.warn(
+                        "Не знайдено manifest item:",
+                        idref
+                    );
+
+                    continue;
+
+                }
+
+
+                /*
+                 * XHTML chapter
+                 */
+
+                if (
+                    item.mediaType !==
+                    "application/xhtml+xml" &&
+
+                    item.mediaType !==
+                    "application/x-dtbook+xml" &&
+
+                    item.mediaType !==
+                    "text/html"
+                ) {
+
+                    continue;
+
+                }
+
+
+                const chapterPath =
+                    normalizePath(
+                        opfDirectory +
+                        decodeURIComponent(
+                            item.href
+                        )
+                    );
+
+
+                console.log(
+                    `Завантаження розділу ${i + 1}/${spine.length}:`,
+                    chapterPath
+                );
+
+
+                try {
+
+                    const chapter =
+                        await loadChapter(
+                            chapterPath,
+                            i + 1
+                        );
+
+
+                    if (chapter) {
+
+                        viewer.appendChild(
+                            chapter
+                        );
+
+
+                        loadedChapters++;
+
+                    }
+
+                } catch (chapterError) {
+
+                    console.error(
+                        "Помилка розділу:",
+                        chapterPath,
+                        chapterError
+                    );
+
+                }
+
+            }
+
+
+            /*
+             * -----------------------------------------
+             * CHECK RESULT
+             * -----------------------------------------
+             */
+
+            if (loadedChapters === 0) {
+
+                throw new Error(
+                    "Не вдалося завантажити жодного розділу EPUB"
+                );
+
+            }
+
+
+            /*
+             * -----------------------------------------
+             * FINISH
+             * -----------------------------------------
+             */
+
+            console.log(
+                "Книгу повністю завантажено."
+            );
+
+
+            console.log(
+                "Завантажено розділів:",
+                loadedChapters
+            );
+
+
+            /*
+             * Книга готова.
+             */
+
+        } catch (error) {
+
+            console.error(
+                "ПОМИЛКА ПРИ ВІДКРИТТІ EPUB:",
+                error
+            );
+
+
+            viewer.innerHTML = `
+
+                <div class="reader-error">
+
+                    <h2>
+                        Не вдалося відкрити книгу
+                    </h2>
+
+                    <p>
+                        ${escapeHtml(
+                error.message ||
+                "Невідома помилка"
+            )}
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    /*
+     * =========================================================
+     * ESCAPE HTML
+     * =========================================================
+     */
+
+    function escapeHtml(value) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /*
+     * =========================================================
+     * CLEAN OBJECT URLS
+     * =========================================================
+     */
+
+    function cleanupObjectUrls() {
+
+        objectUrls.forEach(
+            url => {
+
+                try {
+
+                    URL.revokeObjectURL(
+                        url
+                    );
+
+                } catch (e) {
+
+                }
+
+            }
+        );
+
+
+        objectUrls = [];
+
+    }
+
+
+    /*
+     * =========================================================
+     * START
+     * =========================================================
+     */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            openEpub();
+
+        }
+    );
+
+
+    /*
+     * =========================================================
+     * RESIZE
+     * =========================================================
+     */
+
+    let resizeTimer = null;
+
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            clearTimeout(
+                resizeTimer
+            );
+
+
+            resizeTimer =
+                setTimeout(
+                    function () {
+
+                        updateReaderStyle();
+
+                    },
+                    150
+                );
+
+        }
+    );
+
+
+    /*
+     * =========================================================
+     * BEFORE PAGE UNLOAD
+     * =========================================================
+     */
+
+    window.addEventListener(
+        "beforeunload",
+        function () {
+
+            cleanupObjectUrls();
+
+        }
+    );
 
 </script>
 
 </body>
+
 </html>

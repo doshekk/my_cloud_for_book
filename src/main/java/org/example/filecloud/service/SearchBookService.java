@@ -23,10 +23,11 @@ public class SearchBookService {
     public String searchBooks(String query, int page) {
         URI uri = UriComponentsBuilder
                 .fromPath("/booksearch")
-                .queryParam("ask",query+"&chb=on")
+                .queryParam("ask", query)
+                .queryParam("chb", "on")
                 .build()
+                .encode()
                 .toUri();
-        System.out.println(uri);
 
         return restClient.get()
                 .uri(uri)
@@ -37,10 +38,11 @@ public class SearchBookService {
     public String searchAuthors(String query, int page) {
         URI uri = UriComponentsBuilder
                 .fromPath("/booksearch")
-                .queryParam("ask", query + "&cha=on")
+                .queryParam("ask", query)
+                .queryParam("cha", "on")
                 .build()
+                .encode()
                 .toUri();
-        System.out.println(uri);
 
         return restClient.get()
                 .uri(uri)
@@ -51,10 +53,11 @@ public class SearchBookService {
     public String seriesBooks(String query, int page) {
         URI uri = UriComponentsBuilder
                 .fromPath("/booksearch")
-                .queryParam("ask", query + "&chs=on")
+                .queryParam("ask", query)
+                .queryParam("chs", "on")
                 .build()
+                .encode()
                 .toUri();
-        System.out.println(uri);
 
         return restClient.get()
                 .uri(uri)
@@ -67,12 +70,10 @@ public class SearchBookService {
                 .fromPath("/b/" + id)
                 .build()
                 .toUri();
-        System.out.println(uri);
         String html = restClient.get()
                 .uri(uri)
                 .retrieve()
                 .body(String.class);
-        System.out.println(html);
         return html;
     }
 
@@ -92,7 +93,6 @@ public class SearchBookService {
                 .fromPath("/sequence/" + id)
                 .build()
                 .toUri();
-        System.out.println(uri);
         String html = restClient.get()
                 .uri(uri)
                 .retrieve()

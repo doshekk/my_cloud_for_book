@@ -11,7 +11,7 @@ public record BookUpdateRequest(
         String description,
         boolean favorite,
         ReadStatus readStatus,
-        String author,
+        List<String> author,
         List<BookGenre> bookGenre,
         MultipartFile file,
         MultipartFile cover

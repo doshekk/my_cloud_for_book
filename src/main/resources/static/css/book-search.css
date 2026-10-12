@@ -1,7 +1,6 @@
-
-    /* =========================
-       RESET
-    ========================= */
+/* ==================================================
+   RESET
+================================================== */
 
 * {
     margin: 0;
@@ -10,10 +9,15 @@
 }
 
 html {
+    width: 100%;
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
+    width: 100%;
+    min-width: 320px;
+
     font-family:
             Inter,
             "Segoe UI",
@@ -24,6 +28,8 @@ body {
     color: #111827;
 
     line-height: 1.5;
+
+    overflow-x: hidden;
 }
 
 button,
@@ -36,31 +42,39 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    PAGE
-========================= */
+================================================== */
 
 .page {
+    width: 100%;
     min-height: 100vh;
 }
 
 
-/* =========================
+/* ==================================================
    HEADER
-========================= */
+================================================== */
 
 .header {
     position: sticky;
+
     top: 0;
+
     z-index: 100;
 
-    height: 72px;
+    width: 100%;
+
+    min-height: 72px;
 
     padding: 0 50px;
 
     display: flex;
+
     align-items: center;
     justify-content: space-between;
+
+    gap: 15px;
 
     background: rgba(255, 255, 255, 0.92);
 
@@ -71,33 +85,46 @@ a {
 }
 
 .logo {
+    flex-shrink: 0;
+
     font-size: 21px;
+
     font-weight: 750;
 
     letter-spacing: -0.4px;
 
     color: #2563eb;
+
+    white-space: nowrap;
 }
 
 .back-button {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
+
+    flex-shrink: 0;
 
     min-height: 40px;
 
     padding: 0 16px;
 
     color: #374151;
+
     background: #f3f4f6;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 9px;
 
     text-decoration: none;
 
     font-size: 14px;
+
     font-weight: 600;
+
+    white-space: nowrap;
 
     transition:
             background 0.2s ease,
@@ -107,6 +134,7 @@ a {
 
 .back-button:hover {
     background: #e9edf3;
+
     border-color: #d1d5db;
 
     transform: translateY(-1px);
@@ -117,12 +145,13 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    CONTENT
-========================= */
+================================================== */
 
 .content {
     width: 100%;
+
     max-width: 1240px;
 
     margin: 0 auto;
@@ -131,16 +160,19 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    SEARCH CARD
-========================= */
+================================================== */
 
 .search-card {
+    width: 100%;
+
     padding: 34px;
 
     background: #ffffff;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 18px;
 
     box-shadow:
@@ -158,32 +190,42 @@ a {
     color: #111827;
 
     font-size: 30px;
+
     font-weight: 750;
 
     line-height: 1.2;
 
     letter-spacing: -0.6px;
+
+    overflow-wrap: anywhere;
 }
 
 .search-header p {
     color: #6b7280;
 
     font-size: 15px;
+
+    line-height: 1.5;
 }
 
 
-/* =========================
+/* ==================================================
    SEARCH FORM
-========================= */
+================================================== */
 
 .search-form {
+    width: 100%;
+
     display: flex;
+
     align-items: flex-end;
 
     gap: 14px;
 }
 
 .form-group {
+    min-width: 0;
+
     flex: 1;
 }
 
@@ -195,19 +237,23 @@ a {
     color: #374151;
 
     font-size: 14px;
+
     font-weight: 650;
 }
 
 .form-group input {
     width: 100%;
+
     height: 48px;
 
     padding: 0 15px;
 
     color: #111827;
+
     background: #ffffff;
 
     border: 1px solid #d1d5db;
+
     border-radius: 9px;
 
     outline: none;
@@ -238,22 +284,27 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    SEARCH BUTTON
-========================= */
+================================================== */
 
 .search-button {
+    flex-shrink: 0;
+
     height: 48px;
 
     padding: 0 25px;
 
     border: none;
+
     border-radius: 9px;
 
     color: #ffffff;
+
     background: #2563eb;
 
     font-size: 14px;
+
     font-weight: 650;
 
     cursor: pointer;
@@ -286,17 +337,21 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    RESULTS
-========================= */
+================================================== */
 
 .results {
+    width: 100%;
+
     margin-top: 42px;
 }
 
 .results-header {
     display: flex;
+
     align-items: flex-end;
+
     justify-content: space-between;
 
     gap: 20px;
@@ -310,49 +365,64 @@ a {
     color: #111827;
 
     font-size: 25px;
+
     font-weight: 750;
 
     letter-spacing: -0.4px;
+
+    overflow-wrap: anywhere;
 }
 
 .results-header p {
     color: #6b7280;
 
     font-size: 14px;
+
+    line-height: 1.5;
 }
 
 .results-count {
     display: inline-flex;
+
     align-items: center;
+
+    flex-shrink: 0;
 
     min-height: 32px;
 
     padding: 0 12px;
 
     color: #1d4ed8;
+
     background: #eff6ff;
 
     border: 1px solid #dbeafe;
+
     border-radius: 8px;
 
     font-size: 13px;
+
     font-weight: 650;
 
     white-space: nowrap;
 }
 
 
-/* =========================
+/* ==================================================
    RESULT SECTION
-========================= */
+================================================== */
 
 .result-section {
+    width: 100%;
+
     margin-bottom: 42px;
 }
 
 .section-header {
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     gap: 15px;
@@ -364,17 +434,22 @@ a {
     color: #1f2937;
 
     font-size: 20px;
+
     font-weight: 700;
 
     letter-spacing: -0.2px;
+
+    overflow-wrap: anywhere;
 }
 
 
-/* =========================
+/* ==================================================
    BOOK GRID
-========================= */
+================================================== */
 
 .book-grid {
+    width: 100%;
+
     display: grid;
 
     grid-template-columns:
@@ -384,11 +459,13 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    BOOK CARD
-========================= */
+================================================== */
 
 .book-card {
+    width: 100%;
+
     display: flex;
 
     gap: 18px;
@@ -400,6 +477,7 @@ a {
     background: #ffffff;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 14px;
 
     box-shadow:
@@ -421,17 +499,21 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    BOOK COVER
-========================= */
+================================================== */
 
 .book-cover {
     width: 88px;
+
     min-width: 88px;
 
     height: 122px;
 
+    flex-shrink: 0;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -443,6 +525,7 @@ a {
             );
 
     border: 1px solid #dbe4ff;
+
     border-radius: 9px;
 
     overflow: hidden;
@@ -450,9 +533,12 @@ a {
 
 .book-icon {
     width: 42px;
+
     height: 52px;
 
     position: relative;
+
+    flex-shrink: 0;
 
     background: #2563eb;
 
@@ -468,9 +554,11 @@ a {
     position: absolute;
 
     left: 7px;
+
     top: 9px;
 
     width: 23px;
+
     height: 3px;
 
     background: rgba(255, 255, 255, 0.8);
@@ -483,9 +571,9 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    BOOK INFO
-========================= */
+================================================== */
 
 .book-info {
     min-width: 0;
@@ -493,6 +581,7 @@ a {
     flex: 1;
 
     display: flex;
+
     flex-direction: column;
 }
 
@@ -502,19 +591,24 @@ a {
     color: #111827;
 
     font-size: 17px;
+
     font-weight: 700;
 
     line-height: 1.35;
+
+    overflow-wrap: anywhere;
 
     word-break: break-word;
 }
 
 
-/* =========================
+/* ==================================================
    AUTHORS
-========================= */
+================================================== */
 
 .authors {
+    min-width: 0;
+
     margin-bottom: 14px;
 }
 
@@ -524,15 +618,18 @@ a {
     color: #6b7280;
 
     font-size: 12px;
+
     font-weight: 700;
 
     text-transform: uppercase;
+
     letter-spacing: 0.5px;
 }
 
 .author-list,
 .series-list {
     display: flex;
+
     flex-direction: column;
 
     gap: 4px;
@@ -540,6 +637,8 @@ a {
     padding: 0;
 
     list-style: none;
+
+    min-width: 0;
 }
 
 .author-list li,
@@ -547,6 +646,8 @@ a {
     min-width: 0;
 
     font-size: 14px;
+
+    overflow-wrap: anywhere;
 }
 
 .author-list a,
@@ -556,6 +657,10 @@ a {
     text-decoration: none;
 
     font-weight: 550;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
 
     transition: color 0.2s ease;
 }
@@ -568,11 +673,13 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    SERIES
-========================= */
+================================================== */
 
 .series {
+    min-width: 0;
+
     margin-bottom: 14px;
 
     padding: 11px 12px;
@@ -580,6 +687,7 @@ a {
     background: #f8fafc;
 
     border: 1px solid #edf0f4;
+
     border-radius: 8px;
 }
 
@@ -589,7 +697,9 @@ a {
 
 .series-list li {
     display: flex;
+
     align-items: center;
+
     flex-wrap: wrap;
 
     gap: 7px;
@@ -600,23 +710,29 @@ a {
 
     align-items: center;
 
+    flex-shrink: 0;
+
     min-height: 22px;
 
     padding: 0 7px;
 
     color: #4b5563;
+
     background: #eef2f7;
 
     border-radius: 5px;
 
     font-size: 11px;
+
     font-weight: 650;
+
+    white-space: nowrap;
 }
 
 
-/* =========================
+/* ==================================================
    NO DATA
-========================= */
+================================================== */
 
 .no-data {
     margin-bottom: 12px;
@@ -624,20 +740,26 @@ a {
     color: #9ca3af;
 
     font-size: 13px;
+
     font-style: italic;
+
+    overflow-wrap: anywhere;
 }
 
 
-/* =========================
+/* ==================================================
    BOOK ACTIONS
-========================= */
+================================================== */
 
 .book-actions {
     display: flex;
 
+    flex-wrap: wrap;
+
     gap: 8px;
 
     margin-top: auto;
+
     padding-top: 12px;
 }
 
@@ -646,6 +768,7 @@ a {
     min-height: 36px;
 
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
 
@@ -656,7 +779,10 @@ a {
     text-decoration: none;
 
     font-size: 12px;
+
     font-weight: 650;
+
+    text-align: center;
 
     transition:
             background 0.2s ease,
@@ -666,6 +792,7 @@ a {
 
 .details-button {
     color: #ffffff;
+
     background: #2563eb;
 }
 
@@ -677,6 +804,7 @@ a {
 
 .author-button {
     color: #374151;
+
     background: #f3f4f6;
 
     border: 1px solid #e5e7eb;
@@ -684,17 +812,20 @@ a {
 
 .author-button:hover {
     color: #111827;
+
     background: #e9edf3;
 
     transform: translateY(-1px);
 }
 
 
-/* =========================
+/* ==================================================
    SERIES GRID
-========================= */
+================================================== */
 
 .series-grid {
+    width: 100%;
+
     display: grid;
 
     grid-template-columns:
@@ -704,11 +835,13 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    SERIES CARD
-========================= */
+================================================== */
 
 .series-card {
+    min-width: 0;
+
     display: flex;
 
     align-items: flex-start;
@@ -720,6 +853,7 @@ a {
     background: #ffffff;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 13px;
 
     box-shadow:
@@ -742,18 +876,24 @@ a {
 
 .series-icon {
     width: 42px;
+
     height: 42px;
 
     min-width: 42px;
 
+    flex-shrink: 0;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     color: #2563eb;
+
     background: #eff6ff;
 
     border: 1px solid #dbeafe;
+
     border-radius: 9px;
 
     font-size: 0;
@@ -763,9 +903,11 @@ a {
     content: "";
 
     width: 20px;
+
     height: 15px;
 
     border: 2px solid #2563eb;
+
     border-radius: 3px;
 
     box-shadow:
@@ -775,6 +917,8 @@ a {
 
 .series-info {
     min-width: 0;
+
+    flex: 1;
 }
 
 .series-title {
@@ -783,9 +927,12 @@ a {
     color: #111827;
 
     font-size: 16px;
+
     font-weight: 700;
 
     line-height: 1.35;
+
+    overflow-wrap: anywhere;
 
     word-break: break-word;
 }
@@ -796,6 +943,7 @@ a {
     text-decoration: none;
 
     font-size: 13px;
+
     font-weight: 600;
 }
 
@@ -806,11 +954,13 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    AUTHORS GRID
-========================= */
+================================================== */
 
 .authors-grid {
+    width: 100%;
+
     display: grid;
 
     grid-template-columns:
@@ -820,11 +970,13 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    AUTHOR CARD
-========================= */
+================================================== */
 
 .author-card {
+    min-width: 0;
+
     display: flex;
 
     align-items: center;
@@ -836,6 +988,7 @@ a {
     background: #ffffff;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 13px;
 
     box-shadow:
@@ -858,17 +1011,22 @@ a {
 
 .author-icon {
     width: 42px;
+
     height: 42px;
 
     min-width: 42px;
 
+    flex-shrink: 0;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     background: #f3f4f6;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 50%;
 
     font-size: 0;
@@ -878,6 +1036,7 @@ a {
     content: "";
 
     width: 13px;
+
     height: 13px;
 
     border: 2px solid #6b7280;
@@ -892,6 +1051,8 @@ a {
 
 .author-info {
     min-width: 0;
+
+    flex: 1;
 }
 
 .author-title {
@@ -900,7 +1061,10 @@ a {
     color: #111827;
 
     font-size: 16px;
+
     font-weight: 700;
+
+    overflow-wrap: anywhere;
 
     word-break: break-word;
 }
@@ -910,9 +1074,9 @@ a {
 }
 
 
-/* =========================
+/* ==================================================
    EMPTY
-========================= */
+================================================== */
 
 .empty {
     grid-column: 1 / -1;
@@ -924,6 +1088,7 @@ a {
     background: #ffffff;
 
     border: 1px solid #e5e7eb;
+
     border-radius: 14px;
 }
 
@@ -943,12 +1108,14 @@ a {
     color: #9ca3af;
 
     font-size: 14px;
+
+    line-height: 1.5;
 }
 
 
-/* =========================
+/* ==================================================
    FOCUS
-========================= */
+================================================== */
 
 .back-button:focus-visible,
 .search-button:focus-visible,
@@ -963,14 +1130,40 @@ a {
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width: 1000px) {
+
+    .header {
+        padding: 0 25px;
+    }
+
+    .content {
+        padding: 35px 20px 60px;
+    }
+
+    .search-card {
+        padding: 28px;
+    }
+
+    .book-grid {
+        grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* ==================================================
+   SMALL TABLET
+================================================== */
 
 @media (max-width: 800px) {
 
     .header {
-        height: 64px;
+        min-height: 64px;
 
         padding: 0 20px;
     }
@@ -1015,6 +1208,10 @@ a {
         gap: 12px;
     }
 
+    .results-count {
+        align-self: flex-start;
+    }
+
     .book-grid {
         grid-template-columns: 1fr;
     }
@@ -1023,60 +1220,517 @@ a {
     .authors-grid {
         grid-template-columns: 1fr;
     }
+
 }
 
 
-/* =========================
-   SMALL MOBILE
-========================= */
+/* ==================================================
+   MOBILE
+================================================== */
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
 
     .header {
-        padding: 0 14px;
+        min-height: 60px;
+
+        padding: 10px 14px;
+    }
+
+    .logo {
+        font-size: 18px;
     }
 
     .back-button {
-        padding: 0 11px;
+        min-height: 36px;
+
+        padding: 0 10px;
 
         font-size: 12px;
     }
 
+
+    /* CONTENT */
+
     .content {
-        padding: 20px 12px 40px;
+        padding: 18px 10px 40px;
     }
 
+
+    /* SEARCH */
+
     .search-card {
-        padding: 20px;
+        padding: 20px 16px;
+
+        border-radius: 13px;
+    }
+
+    .search-header {
+        margin-bottom: 20px;
     }
 
     .search-header h1 {
+        margin-bottom: 6px;
+
         font-size: 23px;
+
+        line-height: 1.25;
     }
 
-    .book-card {
-        flex-direction: column;
-
-        padding: 17px;
+    .search-header p {
+        font-size: 13px;
     }
 
-    .book-cover {
-        width: 100%;
-        height: 150px;
+    .form-group label {
+        margin-bottom: 7px;
+
+        font-size: 13px;
     }
 
-    .book-actions {
-        width: 100%;
+    .form-group input {
+        height: 46px;
+
+        padding: 0 12px;
+
+        font-size: 14px;
     }
 
-    .details-button,
-    .author-button {
-        flex: 1;
+    .search-button {
+        height: 46px;
+
+        font-size: 13px;
+    }
+
+
+    /* RESULTS */
+
+    .results {
+        margin-top: 28px;
+    }
+
+    .results-header {
+        margin-bottom: 22px;
+    }
+
+    .results-header h2 {
+        font-size: 21px;
+    }
+
+    .results-header p {
+        font-size: 13px;
+    }
+
+    .results-count {
+        min-height: 30px;
+
+        padding: 0 10px;
+
+        font-size: 12px;
+    }
+
+
+    /* SECTION */
+
+    .result-section {
+        margin-bottom: 32px;
     }
 
     .section-header {
         align-items: flex-start;
 
         flex-direction: column;
+
+        gap: 6px;
+
+        margin-bottom: 13px;
     }
+
+    .section-header h2 {
+        font-size: 18px;
+    }
+
+
+    /* BOOK */
+
+    .book-grid {
+        gap: 12px;
+    }
+
+    .book-card {
+        gap: 14px;
+
+        padding: 15px;
+
+        border-radius: 12px;
+    }
+
+    .book-cover {
+        width: 78px;
+
+        min-width: 78px;
+
+        height: 108px;
+
+        border-radius: 8px;
+    }
+
+    .book-icon {
+        width: 36px;
+
+        height: 46px;
+    }
+
+    .book-icon::before {
+        left: 6px;
+
+        top: 8px;
+
+        width: 20px;
+    }
+
+    .book-title {
+        margin-bottom: 8px;
+
+        font-size: 15px;
+
+        line-height: 1.35;
+    }
+
+    .authors {
+        margin-bottom: 10px;
+    }
+
+    .info-title {
+        margin-bottom: 5px;
+
+        font-size: 10px;
+    }
+
+    .author-list,
+    .series-list {
+        gap: 3px;
+    }
+
+    .author-list li,
+    .series-list li {
+        font-size: 12px;
+    }
+
+    .series {
+        margin-bottom: 10px;
+
+        padding: 9px 10px;
+    }
+
+    .series-list {
+        gap: 5px;
+    }
+
+    .series-number {
+        min-height: 20px;
+
+        padding: 0 6px;
+
+        font-size: 10px;
+    }
+
+    .no-data {
+        margin-bottom: 8px;
+
+        font-size: 11px;
+    }
+
+    .book-actions {
+        gap: 6px;
+
+        padding-top: 9px;
+    }
+
+    .details-button,
+    .author-button {
+        min-height: 34px;
+
+        padding: 0 9px;
+
+        font-size: 11px;
+    }
+
+
+    /* SERIES */
+
+    .series-grid,
+    .authors-grid {
+        gap: 10px;
+    }
+
+    .series-card {
+        gap: 12px;
+
+        padding: 15px;
+
+        border-radius: 11px;
+    }
+
+    .series-icon,
+    .author-icon {
+        width: 38px;
+
+        height: 38px;
+
+        min-width: 38px;
+    }
+
+    .series-title {
+        margin-bottom: 7px;
+
+        font-size: 14px;
+    }
+
+    .series-button {
+        font-size: 12px;
+    }
+
+
+    /* AUTHORS */
+
+    .author-card {
+        gap: 12px;
+
+        padding: 15px;
+
+        border-radius: 11px;
+    }
+
+    .author-title {
+        font-size: 14px;
+    }
+
+    .author-button {
+        min-height: 32px;
+    }
+
+
+    /* EMPTY */
+
+    .empty {
+        padding: 40px 15px;
+
+        border-radius: 12px;
+    }
+
+    .empty h3 {
+        font-size: 16px;
+    }
+
+    .empty p {
+        font-size: 13px;
+    }
+
+}
+
+
+/* ==================================================
+   VERY SMALL PHONES
+================================================== */
+
+@media (max-width: 400px) {
+
+    .header {
+        padding: 9px 10px;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    .back-button {
+        min-height: 34px;
+
+        padding: 0 8px;
+
+        font-size: 11px;
+    }
+
+    .content {
+        padding: 14px 7px 30px;
+    }
+
+    .search-card {
+        padding: 17px 13px;
+    }
+
+    .search-header h1 {
+        font-size: 21px;
+    }
+
+    .search-header p {
+        font-size: 12px;
+    }
+
+    .form-group input,
+    .search-button {
+        height: 44px;
+    }
+
+
+    /* BOOK */
+
+    .book-card {
+        gap: 11px;
+
+        padding: 12px;
+    }
+
+    .book-cover {
+        width: 68px;
+
+        min-width: 68px;
+
+        height: 96px;
+    }
+
+    .book-title {
+        font-size: 14px;
+    }
+
+    .author-list li,
+    .series-list li {
+        font-size: 11px;
+    }
+
+    .book-actions {
+        flex-direction: column;
+    }
+
+    .details-button,
+    .author-button {
+        width: 100%;
+
+        flex: none;
+    }
+
+
+    /* SERIES */
+
+    .series-card {
+        padding: 13px;
+    }
+
+    .series-icon,
+    .author-icon {
+        width: 35px;
+
+        height: 35px;
+
+        min-width: 35px;
+    }
+
+    .series-title {
+        font-size: 13px;
+    }
+
+    .series-button {
+        font-size: 11px;
+    }
+
+
+    /* AUTHORS */
+
+    .author-card {
+        padding: 13px;
+    }
+
+    .author-title {
+        font-size: 13px;
+    }
+
+}
+
+
+/* ==================================================
+   ULTRA SMALL PHONES
+================================================== */
+
+@media (max-width: 350px) {
+
+    .header {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .logo {
+        font-size: 16px;
+    }
+
+    .back-button {
+        padding: 0 7px;
+
+        font-size: 10px;
+    }
+
+    .content {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .search-card {
+        padding: 15px 11px;
+    }
+
+    .book-card {
+        padding: 10px;
+
+        gap: 9px;
+    }
+
+    .book-cover {
+        width: 62px;
+
+        min-width: 62px;
+
+        height: 88px;
+    }
+
+    .book-title {
+        font-size: 13px;
+    }
+
+    .info-title {
+        font-size: 9px;
+    }
+
+    .author-list li,
+    .series-list li {
+        font-size: 10px;
+    }
+
+    .details-button,
+    .author-button {
+        font-size: 10px;
+    }
+
+}
+
+
+/* ==================================================
+   TOUCH DEVICES
+================================================== */
+
+@media (hover: none) {
+
+    .book-card:hover,
+    .series-card:hover,
+    .author-card:hover {
+        transform: none;
+
+        box-shadow:
+                0 2px 5px rgba(15, 23, 42, 0.025);
+    }
+
+    .search-button:hover,
+    .details-button:hover,
+    .author-button:hover,
+    .back-button:hover {
+        transform: none;
+    }
+
 }

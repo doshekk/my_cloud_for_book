@@ -18,9 +18,7 @@
 
 </head>
 
-
 <body>
-
 
 <!-- ================================================== -->
 <!-- HEADER -->
@@ -35,7 +33,6 @@
             FileCloud
         </a>
 
-
         <a th:href="@{/books}"
            class="back-link">
             Мої книги
@@ -44,7 +41,6 @@
     </div>
 
 </header>
-
 
 
 <!-- ================================================== -->
@@ -61,7 +57,9 @@
     <section class="author-header">
 
 
+        <!-- ================================================== -->
         <!-- AUTHOR IMAGE -->
+        <!-- ================================================== -->
 
         <div class="author-avatar">
 
@@ -69,9 +67,6 @@
                  th:src="${author.imageUri()}"
                  th:alt="${author.name()}"
                  class="author-image">
-
-
-            <!-- IMAGE NOT FOUND -->
 
             <div th:if="${author.imageUri() == null or author.imageUri().isBlank()}"
                  class="no-cover">
@@ -83,31 +78,29 @@
         </div>
 
 
-
+        <!-- ================================================== -->
         <!-- AUTHOR INFORMATION -->
+        <!-- ================================================== -->
 
         <div class="author-info">
-
 
             <span class="author-label">
                 Автор
             </span>
-
 
             <h1 th:text="${author.name()}">
                 Ім'я автора
             </h1>
 
 
-
+            <!-- ================================================== -->
             <!-- DESCRIPTION -->
+            <!-- ================================================== -->
 
-            <p th:if="${author.description() != null and !author.description().isBlank()}"
-               th:text="${author.description()}"
-               class="author-description"
-               style="white-space: pre-line;">
-            </p>
-
+            <div class="author-description"
+                 th:if="${author.description() != null and !author.description().isBlank()}"
+                 th:text="${author.description()}">
+            </div>
 
 
             <!-- ================================================== -->
@@ -115,9 +108,6 @@
             <!-- ================================================== -->
 
             <div class="author-stats">
-
-
-                <!-- SERIES COUNT -->
 
                 <div class="stat">
 
@@ -132,9 +122,6 @@
                 </div>
 
 
-
-                <!-- BOOK COUNT -->
-
                 <div class="stat">
 
                     <strong th:text="${bookCount}">
@@ -147,13 +134,11 @@
 
                 </div>
 
-
             </div>
 
         </div>
 
     </section>
-
 
 
     <!-- ================================================== -->
@@ -171,13 +156,11 @@
                 Серії книг
             </h2>
 
-
             <span th:text="${#lists.size(series)}">
                 0
             </span>
 
         </div>
-
 
 
         <!-- ================================================== -->
@@ -187,18 +170,15 @@
         <div class="empty"
              th:if="${series == null or #lists.isEmpty(series)}">
 
-
             <h3>
                 Серій не знайдено
             </h3>
-
 
             <p>
                 У цього автора поки немає інформації про серії.
             </p>
 
         </div>
-
 
 
         <!-- ================================================== -->
@@ -221,20 +201,17 @@
 
                 <div class="series-card-header">
 
-
                     <div>
 
                         <span class="series-label">
                             Серія
                         </span>
 
-
                         <h3 th:text="${currentSeries.name()}">
                             Назва серії
                         </h3>
 
                     </div>
-
 
 
                     <!-- BOOK COUNT -->
@@ -247,7 +224,6 @@
                     </span>
 
                 </div>
-
 
 
                 <!-- ================================================== -->
@@ -277,18 +253,13 @@
                         </div>
 
 
-
                         <!-- BOOK INFORMATION -->
 
                         <div class="book-info">
 
-
-                            <!-- BOOK TITLE -->
-
                             <h4 th:text="${book.title()}">
                                 Назва книги
                             </h4>
-
 
 
                             <!-- ================================================== -->
@@ -298,26 +269,20 @@
                             <div class="translators"
                                  th:if="${book.translators() != null and !#lists.isEmpty(book.translators())}">
 
-
                                 <span class="translator-label">
                                     Перекладачі:
                                 </span>
 
-
-
                                 <span class="translator"
                                       th:each="translator, translatorStat : ${book.translators()}">
-
 
                                     <span th:text="${translator.name()}">
                                         Перекладач
                                     </span>
 
-
                                     <span th:if="${!translatorStat.last}">
                                         ,
                                     </span>
-
 
                                 </span>
 
@@ -326,18 +291,15 @@
                         </div>
 
 
-
                         <!-- BOOK ARROW -->
 
                         <div class="book-arrow">
                             →
                         </div>
 
-
                     </a>
 
                 </div>
-
 
 
                 <!-- ================================================== -->
@@ -351,17 +313,13 @@
 
                 </div>
 
-
             </article>
 
         </div>
 
-
     </section>
 
-
 </main>
-
 
 </body>
 

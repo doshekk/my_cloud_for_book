@@ -1,9 +1,21 @@
+/* ==================================================
+   RESET
+================================================== */
+
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
+
 body {
-    margin: 0;
+    width: 100%;
+    min-width: 320px;
 
     font-family:
             Inter,
@@ -13,28 +25,49 @@ body {
             sans-serif;
 
     background: #f5f6fa;
+
     color: #20222a;
+
+    overflow-x: hidden;
 }
 
 
-/* =========================
+/* ==================================================
+   PAGE
+================================================== */
+
+.author-page {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 45px 24px 70px;
+}
+
+
+/* ==================================================
    HEADER
-========================= */
+================================================== */
 
 .header {
-    height: 70px;
+    width: 100%;
 
-    background: rgba(255, 255, 255, 0.9);
+    min-height: 70px;
+
+    background: rgba(255, 255, 255, 0.92);
 
     border-bottom: 1px solid #e5e7eb;
 
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .header-container {
+    width: 100%;
     max-width: 1100px;
 
-    height: 100%;
+    min-height: 70px;
 
     margin: 0 auto;
 
@@ -45,9 +78,13 @@ body {
     align-items: center;
 
     justify-content: space-between;
+
+    gap: 15px;
 }
 
 .logo {
+    flex-shrink: 0;
+
     color: #6d4aff;
 
     font-size: 23px;
@@ -55,9 +92,19 @@ body {
     font-weight: 800;
 
     text-decoration: none;
+
+    white-space: nowrap;
+
+    transition: 0.2s;
+}
+
+.logo:hover {
+    color: #5840dc;
 }
 
 .back-link {
+    flex-shrink: 0;
+
     color: #555b6e;
 
     text-decoration: none;
@@ -66,37 +113,34 @@ body {
 
     font-weight: 600;
 
+    padding: 9px 14px;
+
+    border-radius: 9px;
+
+    white-space: nowrap;
+
     transition: 0.2s;
 }
 
 .back-link:hover {
     color: #6d4aff;
+
+    background: #f1efff;
 }
 
 
-/* =========================
-   PAGE
-========================= */
-
-.author-page {
-    max-width: 1100px;
-
-    margin: 0 auto;
-
-    padding: 45px 24px 70px;
-}
-
-
-/* =========================
+/* ==================================================
    AUTHOR HEADER
-========================= */
+================================================== */
 
 .author-header {
+    width: 100%;
+
     display: flex;
 
-    align-items: center;
+    align-items: flex-start;
 
-    gap: 25px;
+    gap: 30px;
 
     padding: 30px;
 
@@ -108,39 +152,112 @@ body {
 
     border-radius: 20px;
 
-    box-shadow: 0 8px 30px rgba(30, 30, 50, 0.05);
+    box-shadow:
+            0 8px 30px rgba(30, 30, 50, 0.05);
+
+    overflow: hidden;
 }
 
-.author-avatar {
-    width: 100px;
-    height: 100px;
 
-    flex-shrink: 0;
+/* ==================================================
+   AUTHOR IMAGE CONTAINER
+================================================== */
+
+.author-avatar {
+    width: 180px;
+    height: 240px;
+
+    flex: 0 0 180px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    background: #f1efff;
+}
+
+
+/* ==================================================
+   AUTHOR IMAGE
+================================================== */
+
+.author-image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    max-width: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    border-radius: 14px;
+}
+
+
+/* ==================================================
+   NO AUTHOR IMAGE
+================================================== */
+
+.no-cover {
+    width: 100%;
+    height: 100%;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    border-radius: 50%;
+    padding: 20px;
 
-    background: linear-gradient(
-            135deg,
-            #7657ff,
-            #9b82ff
-    );
+    text-align: center;
 
-    color: white;
+    color: #9297a6;
 
-    font-size: 40px;
+    background: #f1efff;
 
-    font-weight: 800;
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+
+    border-radius: 14px;
+}
+
+
+/* ==================================================
+   AUTHOR INFORMATION
+================================================== */
+
+.author-info {
+    flex: 1;
+
+    min-width: 0;
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
 }
 
 .author-label {
     display: block;
 
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 
     color: #8b90a0;
 
@@ -154,25 +271,70 @@ body {
 }
 
 .author-info h1 {
-    margin: 0 0 18px;
+    margin: 0 0 20px;
+
+    max-width: 100%;
+
+    color: #20222a;
 
     font-size: 32px;
 
+    font-weight: 800;
+
     line-height: 1.2;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
 }
 
 
-/* =========================
-   STATS
-========================= */
+/* ==================================================
+   AUTHOR DESCRIPTION
+================================================== */
+
+.author-description {
+    width: 100%;
+
+    max-width: 100%;
+
+    margin-bottom: 25px;
+
+    color: #626878;
+
+    font-size: 15px;
+
+    line-height: 1.75;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+
+    white-space: pre-line;
+}
+
+
+/* ==================================================
+   AUTHOR STATS
+================================================== */
 
 .author-stats {
     display: flex;
 
+    align-items: center;
+
+    flex-wrap: wrap;
+
     gap: 30px;
+
+    margin-top: auto;
+
+    min-width: 0;
 }
 
 .stat {
+    min-width: 0;
+
     display: flex;
 
     align-items: baseline;
@@ -181,23 +343,31 @@ body {
 }
 
 .stat strong {
+    color: #6d4aff;
+
     font-size: 20px;
 
-    color: #6d4aff;
+    font-weight: 800;
+
+    white-space: nowrap;
 }
 
 .stat span {
     color: #777d8d;
 
     font-size: 14px;
+
+    line-height: 1.4;
 }
 
 
-/* =========================
-   SECTION
-========================= */
+/* ==================================================
+   SECTION HEADER
+================================================== */
 
 .section-header {
+    width: 100%;
+
     display: flex;
 
     align-items: center;
@@ -205,17 +375,31 @@ body {
     gap: 12px;
 
     margin-bottom: 20px;
+
+    min-width: 0;
 }
 
 .section-header h2 {
+    min-width: 0;
+
     margin: 0;
 
+    color: #20222a;
+
     font-size: 25px;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+
+    overflow-wrap: anywhere;
 }
 
 .section-header > span {
     min-width: 28px;
     height: 28px;
+
+    flex-shrink: 0;
 
     padding: 0 8px;
 
@@ -236,11 +420,13 @@ body {
 }
 
 
-/* =========================
-   SERIES
-========================= */
+/* ==================================================
+   SERIES LIST
+================================================== */
 
 .series-list {
+    width: 100%;
+
     display: flex;
 
     flex-direction: column;
@@ -248,7 +434,16 @@ body {
     gap: 20px;
 }
 
+
+/* ==================================================
+   SERIES CARD
+================================================== */
+
 .series-card {
+    width: 100%;
+
+    min-width: 0;
+
     background: white;
 
     border: 1px solid #e7e8ef;
@@ -257,10 +452,29 @@ body {
 
     overflow: hidden;
 
-    box-shadow: 0 6px 25px rgba(30, 30, 50, 0.04);
+    box-shadow:
+            0 6px 25px rgba(30, 30, 50, 0.04);
+
+    transition:
+            box-shadow 0.2s,
+            transform 0.2s;
 }
 
+.series-card:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+            0 10px 30px rgba(30, 30, 50, 0.07);
+}
+
+
+/* ==================================================
+   SERIES HEADER
+================================================== */
+
 .series-card-header {
+    width: 100%;
+
     padding: 22px 25px;
 
     display: flex;
@@ -272,6 +486,8 @@ body {
     gap: 20px;
 
     border-bottom: 1px solid #eeeeF3;
+
+    min-width: 0;
 }
 
 .series-label {
@@ -291,13 +507,32 @@ body {
 }
 
 .series-card h3 {
+    min-width: 0;
+
     margin: 0;
 
+    color: #20222a;
+
     font-size: 20px;
+
+    font-weight: 750;
+
+    line-height: 1.3;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
 }
+
+
+/* ==================================================
+   BOOK COUNT
+================================================== */
 
 .books-count {
     padding: 7px 11px;
+
+    flex-shrink: 0;
 
     border-radius: 8px;
 
@@ -313,17 +548,26 @@ body {
 }
 
 
-/* =========================
-   BOOKS
-========================= */
+/* ==================================================
+   BOOKS LIST
+================================================== */
 
 .books-list {
+    width: 100%;
+
     display: flex;
 
     flex-direction: column;
 }
 
+
+/* ==================================================
+   BOOK
+================================================== */
+
 .book {
+    width: 100%;
+
     min-height: 75px;
 
     padding: 15px 25px;
@@ -355,11 +599,16 @@ body {
     padding-left: 30px;
 }
 
+
+/* ==================================================
+   BOOK NUMBER
+================================================== */
+
 .book-number {
     width: 34px;
     height: 34px;
 
-    flex-shrink: 0;
+    flex: 0 0 34px;
 
     display: flex;
 
@@ -377,26 +626,54 @@ body {
     font-weight: 700;
 }
 
+
+/* ==================================================
+   BOOK INFORMATION
+================================================== */
+
 .book-info {
     flex: 1;
 
     min-width: 0;
+
+    overflow: hidden;
 }
 
 .book-info h4 {
+    width: 100%;
+
     margin: 0 0 6px;
+
+    color: #20222a;
 
     font-size: 15px;
 
     font-weight: 700;
+
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
 }
 
+
+/* ==================================================
+   TRANSLATORS
+================================================== */
+
 .translators {
+    width: 100%;
+
     color: #7d8290;
 
     font-size: 13px;
 
     line-height: 1.5;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
 }
 
 .translator-label {
@@ -405,14 +682,25 @@ body {
 
 .translator {
     color: #6d4aff;
+
+    overflow-wrap: anywhere;
 }
 
+
+/* ==================================================
+   BOOK ARROW
+================================================== */
+
 .book-arrow {
+    flex: 0 0 auto;
+
     color: #aaaebb;
 
     font-size: 20px;
 
-    transition: 0.2s;
+    transition:
+            color 0.2s,
+            transform 0.2s;
 }
 
 .book:hover .book-arrow {
@@ -422,11 +710,13 @@ body {
 }
 
 
-/* =========================
+/* ==================================================
    EMPTY
-========================= */
+================================================== */
 
 .empty {
+    width: 100%;
+
     padding: 50px 25px;
 
     text-align: center;
@@ -436,12 +726,19 @@ body {
     border: 1px solid #e7e8ef;
 
     border-radius: 18px;
+
+    box-shadow:
+            0 6px 25px rgba(30, 30, 50, 0.04);
 }
 
 .empty h3 {
     margin: 0 0 8px;
 
+    color: #20222a;
+
     font-size: 18px;
+
+    line-height: 1.4;
 }
 
 .empty p {
@@ -450,7 +747,16 @@ body {
     color: #858a98;
 
     font-size: 14px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
 }
+
+
+/* ==================================================
+   NO BOOKS
+================================================== */
 
 .no-books {
     padding: 20px 25px;
@@ -458,53 +764,599 @@ body {
     color: #9297a6;
 
     font-size: 14px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
 }
 
 
-/* =========================
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width: 800px) {
+
+    .author-page {
+        padding: 35px 20px 60px;
+    }
+
+
+    .author-header {
+        gap: 25px;
+
+        padding: 25px;
+
+        border-radius: 18px;
+    }
+
+
+    .author-avatar {
+        width: 150px;
+        height: 210px;
+
+        flex-basis: 150px;
+    }
+
+
+    .author-info h1 {
+        font-size: 29px;
+    }
+
+
+    .author-description {
+        font-size: 14px;
+
+        line-height: 1.65;
+    }
+
+
+    .author-stats {
+        gap: 22px;
+    }
+
+
+    .series-card-header {
+        padding: 20px;
+    }
+
+
+    .book {
+        padding-left: 20px;
+
+        padding-right: 20px;
+    }
+
+}
+
+
+/* ==================================================
    MOBILE
-========================= */
+================================================== */
 
 @media (max-width: 650px) {
 
-    .author-page {
-        padding: 25px 15px 50px;
+    .header {
+        min-height: 60px;
     }
+
+
+    .header-container {
+        min-height: 60px;
+
+        padding: 0 14px;
+    }
+
+
+    .logo {
+        font-size: 20px;
+    }
+
+
+    .back-link {
+        font-size: 13px;
+
+        padding: 8px 10px;
+    }
+
+
+    /* PAGE */
+
+    .author-page {
+        padding: 20px 12px 45px;
+    }
+
+
+    /* AUTHOR */
 
     .author-header {
-        padding: 22px;
-
-        align-items: flex-start;
+        padding: 20px;
 
         flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 22px;
+
+        margin-bottom: 30px;
+
+        border-radius: 15px;
     }
+
+
+    /* IMAGE */
 
     .author-avatar {
-        width: 75px;
-        height: 75px;
+        width: min(160px, 55vw);
 
-        font-size: 30px;
+        height: auto;
+
+        aspect-ratio: 3 / 4;
+
+        flex: 0 0 auto;
+
+        align-self: center;
+
+        border-radius: 13px;
     }
+
+
+    .author-image,
+    .no-cover {
+        border-radius: 13px;
+    }
+
+
+    /* INFO */
+
+    .author-info {
+        width: 100%;
+
+        min-width: 0;
+
+        overflow: visible;
+    }
+
+
+    .author-label {
+        text-align: center;
+
+        font-size: 11px;
+    }
+
 
     .author-info h1 {
+        margin-bottom: 15px;
+
         font-size: 26px;
+
+        line-height: 1.25;
+
+        text-align: center;
     }
+
+
+    .author-description {
+        margin-bottom: 20px;
+
+        font-size: 14px;
+
+        line-height: 1.65;
+
+        text-align: left;
+    }
+
+
+    /* STATS */
+
+    .author-stats {
+        width: 100%;
+
+        justify-content: center;
+
+        gap: 20px;
+
+        margin-top: 5px;
+    }
+
+
+    .stat {
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 2px;
+
+        text-align: center;
+    }
+
+
+    .stat strong {
+        font-size: 20px;
+    }
+
+
+    .stat span {
+        font-size: 12px;
+    }
+
+
+    /* SECTION */
+
+    .section-header {
+        gap: 9px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .section-header h2 {
+        font-size: 21px;
+    }
+
+
+    .section-header > span {
+        min-width: 25px;
+        height: 25px;
+
+        font-size: 11px;
+    }
+
+
+    /* SERIES */
+
+    .series-list {
+        gap: 14px;
+    }
+
+
+    .series-card {
+        border-radius: 14px;
+    }
+
 
     .series-card-header {
-        align-items: flex-start;
+        padding: 17px;
 
         flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
     }
+
+
+    .series-label {
+        margin-bottom: 4px;
+
+        font-size: 10px;
+    }
+
+
+    .series-card h3 {
+        width: 100%;
+
+        font-size: 18px;
+
+        line-height: 1.35;
+    }
+
+
+    .books-count {
+        padding: 6px 9px;
+
+        font-size: 11px;
+    }
+
+
+    /* BOOK */
 
     .book {
-        padding: 14px 15px;
+        min-height: 68px;
+
+        padding: 13px 14px;
+
+        gap: 10px;
     }
 
+
     .book:hover {
-        padding-left: 15px;
+        padding-left: 14px;
     }
+
+
+    .book-number {
+        width: 31px;
+        height: 31px;
+
+        flex-basis: 31px;
+
+        border-radius: 8px;
+
+        font-size: 12px;
+    }
+
+
+    .book-info {
+        min-width: 0;
+    }
+
+
+    .book-info h4 {
+        margin-bottom: 4px;
+
+        font-size: 14px;
+
+        line-height: 1.35;
+    }
+
+
+    .translators {
+        font-size: 11px;
+
+        line-height: 1.4;
+    }
+
 
     .book-arrow {
         display: none;
     }
+
+
+    /* EMPTY */
+
+    .empty {
+        padding: 40px 18px;
+
+        border-radius: 14px;
+    }
+
+
+    .empty h3 {
+        font-size: 17px;
+    }
+
+
+    .empty p {
+        font-size: 13px;
+    }
+
+
+    .no-books {
+        padding: 17px;
+
+        font-size: 13px;
+    }
+
+}
+
+
+/* ==================================================
+   SMALL MOBILE
+================================================== */
+
+@media (max-width: 400px) {
+
+    .header-container {
+        padding: 0 10px;
+    }
+
+
+    .logo {
+        font-size: 18px;
+    }
+
+
+    .back-link {
+        padding: 7px 8px;
+
+        font-size: 12px;
+    }
+
+
+    .author-page {
+        padding: 14px 8px 35px;
+    }
+
+
+    .author-header {
+        padding: 17px;
+
+        gap: 19px;
+
+        margin-bottom: 25px;
+    }
+
+
+    .author-avatar {
+        width: min(145px, 52vw);
+    }
+
+
+    .author-info h1 {
+        font-size: 23px;
+    }
+
+
+    .author-description {
+        font-size: 13px;
+
+        line-height: 1.6;
+    }
+
+
+    .author-stats {
+        display: grid;
+
+        grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+        gap: 7px;
+    }
+
+
+    .stat {
+        min-width: 0;
+
+        padding: 8px 3px;
+    }
+
+
+    .stat strong {
+        font-size: 18px;
+    }
+
+
+    .stat span {
+        font-size: 11px;
+
+        overflow-wrap: anywhere;
+    }
+
+
+    .section-header h2 {
+        font-size: 19px;
+    }
+
+
+    .series-card-header {
+        padding: 15px;
+    }
+
+
+    .series-card h3 {
+        font-size: 16px;
+    }
+
+
+    .books-count {
+        font-size: 10px;
+    }
+
+
+    .book {
+        padding: 12px 10px;
+
+        gap: 8px;
+    }
+
+
+    .book:hover {
+        padding-left: 10px;
+    }
+
+
+    .book-number {
+        width: 29px;
+        height: 29px;
+
+        flex-basis: 29px;
+
+        font-size: 11px;
+    }
+
+
+    .book-info h4 {
+        font-size: 13px;
+    }
+
+
+    .translators {
+        font-size: 10px;
+    }
+
+}
+
+
+/* ==================================================
+   VERY SMALL PHONES
+================================================== */
+
+@media (max-width: 350px) {
+
+    .author-page {
+        padding-left: 6px;
+
+        padding-right: 6px;
+    }
+
+
+    .author-header {
+        padding: 15px;
+    }
+
+
+    .author-avatar {
+        width: 130px;
+    }
+
+
+    .author-info h1 {
+        font-size: 21px;
+    }
+
+
+    .author-description {
+        font-size: 12px;
+    }
+
+
+    .author-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .stat {
+        flex-direction: row;
+
+        justify-content: center;
+
+        gap: 6px;
+    }
+
+
+    .series-card-header {
+        padding: 14px;
+    }
+
+
+    .series-card h3 {
+        font-size: 15px;
+    }
+
+
+    .book {
+        padding-left: 8px;
+
+        padding-right: 8px;
+    }
+
+
+    .book:hover {
+        padding-left: 8px;
+    }
+
+}
+
+
+/* ==================================================
+   TOUCH DEVICES
+================================================== */
+
+@media (hover: none) {
+
+    .series-card:hover {
+        transform: none;
+    }
+
+
+    .book:hover {
+        padding-left: 14px;
+    }
+
+
+    .book:hover .book-arrow {
+        transform: none;
+    }
+
 }

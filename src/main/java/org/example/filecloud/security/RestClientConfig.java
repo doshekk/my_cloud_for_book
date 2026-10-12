@@ -11,7 +11,7 @@ public class RestClientConfig {
     @Bean
     public RestClient BooksRestClient() {
         return RestClient.builder()
-                .baseUrl("https://flibusta.site")
+                .baseUrl("http://www.flibusta.site")
                 .requestInterceptor(((request, body, execution) -> {
                     System.out.println("metod:" + request.getMethod());
                     System.out.println("URL:" + request.getURI());

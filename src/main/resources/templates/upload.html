@@ -28,7 +28,8 @@
 
     <nav class="navigation">
 
-        <a th:href="@{/}">
+        <a th:href="@{/}"
+           class="active">
             Головна
         </a>
 
@@ -36,8 +37,11 @@
             Мої книги
         </a>
 
-        <a th:href="@{/books/upload}"
-           class="active">
+        <a th:href="@{/search}">
+            🔍 Пошук книг
+        </a>
+
+        <a th:href="@{/books/upload}">
             Завантажити книгу
         </a>
 

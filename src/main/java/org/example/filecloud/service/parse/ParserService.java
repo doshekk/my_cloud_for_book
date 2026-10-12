@@ -24,7 +24,9 @@ public class ParserService {
     // збір інформації про книги при пошуку
     public List<BookResponse> parseSearchBook(String html) {
         Document document = Jsoup.parse(html);
+//        System.out.println(document.text());
         Elements books = document.select("h3 + ul > li");
+//        System.out.println("aa:"+books.text());
         List<BookResponse> result = new ArrayList<>();
 
         for (Element book : books) {

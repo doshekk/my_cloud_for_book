@@ -7,19 +7,25 @@ import org.example.filecloud.dao.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
 @Table(name = "books")
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String title;
+
+    @Column(name = "description", length = 1500)
     private String description;
+
     private boolean favorite;
+
     private LocalDateTime addTime;
-    private String author;
+
+    @ElementCollection
+    private List<String> authors;
 
     @ElementCollection(targetClass = BookGenre.class)
     @Enumerated(EnumType.STRING)
@@ -45,14 +51,13 @@ public class Book {
 
 
     @PrePersist
-    protected void onAdd(){
-        if(readStatus == null){
+    protected void onAdd() {
+        if (readStatus == null) {
             readStatus = ReadStatus.READING;
         }
+
         addTime = LocalDateTime.now();
     }
-
-
 
     public long getId() {
         return id;
@@ -78,13 +83,24 @@ public class Book {
         this.description = description;
     }
 
-
     public boolean isFavorite() {
         return favorite;
     }
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public LocalDateTime getAddTime() {
+        return addTime;
+    }
+
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 
     public List<BookGenre> getBookGenre() {
@@ -117,21 +133,6 @@ public class Book {
 
     public void setFileMetadata(FileMetadata fileMetadata) {
         this.fileMetadata = fileMetadata;
-    }
-
-    public LocalDateTime getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(LocalDateTime addTime) {
-        this.addTime = addTime;
-    }
-
-    public String getAuthor() {        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public CoverFileMetadata getCoverFileMetadata() {

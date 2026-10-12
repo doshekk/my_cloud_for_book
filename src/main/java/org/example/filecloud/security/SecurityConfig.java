@@ -13,7 +13,7 @@ import org.springframework.security.web.context.SecurityContextHolderFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Bean
+        @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http

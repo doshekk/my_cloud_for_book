@@ -2,10 +2,15 @@ package org.example.filecloud.service;
 
 import org.example.filecloud.dao.CoverFileMetadata;
 import org.example.filecloud.dao.FileMetadata;
+import org.example.filecloud.dao.FileType;
 import org.example.filecloud.dao.book.Book;
+import org.example.filecloud.dao.book.BookGenre;
+import org.example.filecloud.dao.book.ReadStatus;
 import org.example.filecloud.dao.user.User;
+import org.example.filecloud.dto.SearchedBookSave;
 import org.example.filecloud.dto.book.BookUpdateRequest;
 import org.example.filecloud.dto.book.BookUploadRequest;
+import org.example.filecloud.dto.book.FileDTO;
 import org.example.filecloud.repository.BookRepository;
 import org.example.filecloud.repository.CoverFileMetadataRepository;
 import org.example.filecloud.repository.FileMetadataRepository;
@@ -13,6 +18,7 @@ import org.example.filecloud.security.CurrentUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -23,6 +29,7 @@ public class BooksService {
     private final FileStorageService fileStorageService;
     private final FileMetadataRepository fileMetadataRepository;
     private final CoverFileMetadataRepository coverFileMetadataRepository;
+
 
     public BooksService(CurrentUserService currentUserService, BookRepository bookRepository, FileStorageService fileStorageService, FileMetadataRepository fileMetadataRepository, CoverFileMetadataRepository coverFileMetadataRepository) {
         this.currentUserService = currentUserService;
@@ -45,7 +52,7 @@ public class BooksService {
 
         book.setTitle(bookDTO.title());
         book.setDescription(bookDTO.description());
-        book.setAuthor(bookDTO.author());
+        book.setAuthors(bookDTO.author());
         book.setOwner(user);
         book.setReadStatus(bookDTO.readStatus());
         book.setFavorite(bookDTO.favorite());
@@ -85,6 +92,39 @@ public class BooksService {
         }
 
         return book;
+    }
+
+    @Transactional
+    public void addSearchedBook(SearchedBookSave bookDTO, FileDTO fileDTO, FileType type){
+        String title = bookDTO.title();
+        String description = bookDTO.description();
+        User owner = currentUserService.getCurrentUser();
+        List<BookGenre> genres = bookDTO.genres();
+        ReadStatus readStatus = bookDTO.readStatus();
+        boolean isFavorite = bookDTO.isFavorite();
+        List<String> authors = bookDTO.authors();
+        byte[] bookFile = fileDTO.bookFile();
+        byte[] cover = fileDTO.coverFile();
+
+        FileMetadata fileMetadata = fileStorageService.saveByteFileInFolder(bookFile, title, type, owner);
+        CoverFileMetadata coverFileMetadata = fileStorageService.saveByteCoverInFolder(cover, owner);
+
+        Book book = new Book();
+
+        book.setTitle(title);
+        book.setDescription(description);
+        book.setAuthors(authors);
+        book.setBookGenre(genres);
+        book.setFavorite(isFavorite);
+        book.setReadStatus(readStatus);
+        book.setOwner(owner);
+        book.setFileMetadata(fileMetadata);
+        book.setCoverFileMetadata(coverFileMetadata);
+
+        fileMetadataRepository.save(fileMetadata);
+        coverFileMetadataRepository.save(coverFileMetadata);
+        bookRepository.save(book);
+
     }
 
     @Transactional
@@ -128,10 +168,11 @@ public class BooksService {
         fileStorageService.deleteBookFiles(
                 book.getFileMetadata(),
                 book.getCoverFileMetadata(),
-                currentUser
-        );
-
+                currentUser);
+        fileMetadataRepository.delete(book.getFileMetadata());
+        coverFileMetadataRepository.delete(book.getCoverFileMetadata());
         bookRepository.delete(book);
+
     }
 
     @Transactional
@@ -154,7 +195,7 @@ public class BooksService {
 
         book.setTitle(bookUpdate.title());
         book.setDescription(bookUpdate.description());
-        book.setAuthor(bookUpdate.author());
+        book.setAuthors(bookUpdate.author());
         book.setFavorite(bookUpdate.favorite());
         book.setBookGenre(bookUpdate.bookGenre());
 

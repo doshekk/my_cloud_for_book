@@ -343,7 +343,7 @@
                         Назва книги
                     </h3>
 
-                    <p th:text="${book.author}">
+                    <p th:text="${#strings.listJoin(book.authors, ', ')}">">
                         Автор
                     </p>
 

@@ -107,11 +107,10 @@
                 <!-- ACTIONS -->
                 <div class="actions">
 
-<!--                    <a th:href="'https://flibusta.site/b/' + ${book.bookId}"-->
-<!--                       class="primary-button"-->
-<!--                       target="_blank">-->
-<!--                        Відкрити книгу-->
-<!--                    </a>-->
+                    <a th:href="@{/book/{id}/add(id=${id})}"
+                       class="primary-button">
+                        Додати книгу
+                    </a>
 
                     <a th:href="@{/books}"
                        class="secondary-button">

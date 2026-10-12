@@ -26,18 +26,24 @@
 
     <nav class="navigation">
 
-        <a th:href="@{/}">
+        <a th:href="@{/}"
+           class="active">
             Головна
         </a>
 
-        <a th:href="@{/books}"
-           class="active">
+        <a th:href="@{/books}">
             Мої книги
+        </a>
+
+        <a th:href="@{/search}">
+            🔍 Пошук книг
         </a>
 
         <a th:href="@{/books/upload}">
             Завантажити книгу
         </a>
+
+    </nav>
 
     </nav>
 
@@ -181,7 +187,7 @@
 
 
                 <p class="author"
-                   th:text="${book.author}">
+                   th:text="${#strings.listJoin(book.authors, ', ')}">
                     Автор
                 </p>
 
@@ -292,7 +298,7 @@
 
         <div
                 class="empty"
-                th:if="${#lists.isEmpty(books)}">
+                th:if="${#lists. isEmpty(books)}">
 
             <div class="empty-icon">
                 📚

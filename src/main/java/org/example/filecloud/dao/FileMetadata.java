@@ -13,6 +13,9 @@ public class FileMetadata {
     private String name;
     private String fileStoragePath;
 
+    @Enumerated(EnumType.STRING)
+    private FileType fileType;
+
     public String getFileStoragePath() {
         return fileStoragePath;
     }
@@ -35,5 +38,13 @@ public class FileMetadata {
 
     public void setUUID(String UUID) {
         this.UUID = UUID;
+    }
+
+    public FileType getFleType() {
+        return fileType;
+    }
+
+    public void setFleType(FileType fleType) {
+        this.fileType = fleType;
     }
 }

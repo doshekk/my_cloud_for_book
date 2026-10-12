@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Додати книгу — FileCloud</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/add-searched-book.css}">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-container">
+
+        <a th:href="@{/}"
+           class="logo">
+            FileCloud
+        </a>
+
+        <a th:href="@{/search}"
+           class="back-link">
+            Пошук книг
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <div class="form-container">
+
+        <!-- =========================
+             Заголовок
+        ========================== -->
+
+        <div class="page-heading">
+
+            <span class="page-label">
+                Моя бібліотека
+            </span>
+
+            <h1>
+                Додати книгу
+            </h1>
+
+            <p>
+                Перевірте інформацію про книгу та додайте її
+                до своєї бібліотеки.
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             Форма
+        ========================== -->
+
+        <form
+                th:action="@{/book/{id}/save(id=${book.id})}"
+                method="post"
+                class="upload-form">
+
+
+            <!-- =========================
+                 Назва
+            ========================== -->
+
+            <div class="form-group">
+
+                <label for="title">
+                    Назва книги
+                </label>
+
+                <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        th:value="${book.title()}"
+                        placeholder="Введіть назву книги"
+                        required>
+
+            </div>
+
+
+            <!-- =========================
+                 Автори
+            ========================== -->
+
+            <div class="form-group">
+
+                <label for="authors">
+                    Автори
+                </label>
+
+                <input
+                        type="text"
+                        id="authors"
+                        name="authors"
+                        th:value="${#strings.listJoin(book.authors(), ', ')}"
+                        placeholder="Наприклад: Джордж Мартін, ..."
+                        required>
+
+                <span class="hint">
+                    Якщо авторів декілька — розділіть їх комою
+                </span>
+
+            </div>
+
+
+            <!-- =========================
+                 Категорії
+            ========================== -->
+
+            <div class="form-group">
+
+                <label>
+                    Категорії книги
+                </label>
+
+                <div class="genres">
+
+                    <label
+                            class="genre-option"
+                            th:each="genre : ${genres}">
+
+                        <!--
+                            ВАЖЛИВО:
+                            name="bookGenre"
+
+                            Spring збере всі вибрані
+                            значення у List<BookGenre>
+                        -->
+
+                        <input
+                                type="checkbox"
+                                name="genres"
+                                th:value="${genre.name()}">
+
+                        <span
+                                class="genre-box"
+                                th:text="${genre.ukrainianName}">
+                            Фентезі
+                        </span>
+
+                    </label>
+
+                </div>
+
+                <span class="hint">
+                    Виберіть одну або декілька категорій
+                </span>
+
+            </div>
+
+
+            <!-- =========================
+                 Опис
+            ========================== -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Опис
+                </label>
+
+                <textarea
+                        id="description"
+                        name="description"
+                        rows="8"
+                        th:text="${book.description()}"
+                        placeholder="Введіть опис книги..."></textarea>
+
+            </div>
+
+
+            <!-- =========================
+                 Статус
+            ========================== -->
+
+            <div class="form-group">
+
+                <label for="readStatus">
+                    Статус читання
+                </label>
+
+                <select
+                        id="readStatus"
+                        name="readStatus">
+
+                    <option value="READING">
+                        Читаю
+                    </option>
+
+                    <option value="COMPLETED">
+                        Прочитано
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =========================
+                 Улюблене
+            ========================== -->
+
+            <div class="favorite-group">
+
+                <label class="favorite-option">
+
+                    <input
+                            type="checkbox"
+                            name="isFavorite"
+                            value="true">
+
+                    <span class="favorite-box">
+                        ♥
+                    </span>
+
+                    <span class="favorite-text">
+
+                        <strong>
+                            Додати до улюблених
+                        </strong>
+
+                        <small>
+                            Книга буде відображатися у списку
+                            улюблених
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- =========================
+                 Кнопки
+            ========================== -->
+
+            <div class="form-actions">
+
+                <a
+                        th:href="@{/search}"
+                        class="cancel-button">
+                    Скасувати
+                </a>
+
+                <button
+                        type="submit"
+                        class="upload-button">
+                    Додати книгу
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+</html>
+

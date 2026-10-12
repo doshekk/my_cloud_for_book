@@ -193,10 +193,9 @@
                                 <a
                                         th:if="${book.bookId != null}"
                                         class="details-button"
-                                        th:href="@{/book/{id}(id=${book.bookId})}"
-                                        target="_blank">
+                                        th:href="@{/book/{id}/add(id=${book.bookId})}">
 
-                                    📖 Відкрити книгу
+                                    Додати книгу
 
                                 </a>
 

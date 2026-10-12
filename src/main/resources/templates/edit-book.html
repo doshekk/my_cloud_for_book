@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Редагування книги — BookCloud</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/edit-book.css}">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="header-container">
+
+        <a th:href="@{/}" class="logo">
+            BookCloud
+        </a>
+
+        <nav class="main-nav">
+
+            <a th:href="@{/}">
+                Головна
+            </a>
+
+            <a th:href="@{/books}" class="active">
+                Мої книги
+            </a>
+
+            <a th:href="@{/search}">
+                Пошук
+            </a>
+
+            <a th:href="@{/books/upload}">
+                Додати книгу
+            </a>
+
+        </nav>
+
+        <div class="user-info">
+            <span th:text="${username}">
+                Користувач
+            </span>
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page-container">
+
+    <div class="page-header">
+
+        <a th:href="@{/books}" class="back-button">
+            ← Назад до книг
+        </a>
+
+        <h1>
+            Редагування книги
+        </h1>
+
+        <p>
+            Змініть інформацію про книгу
+        </p>
+
+    </div>
+
+
+    <div class="edit-card">
+
+
+        <!-- Обкладинка -->
+        <div class="cover-section">
+
+            <div class="cover-wrapper">
+
+                <img th:if="${book.coverFileMetadata != null}"
+                     th:src="@{/books/{id}/cover(id=${book.id})}"
+                     alt="Обкладинка книги"
+                     class="book-cover">
+
+                <div th:if="${book.coverFileMetadata == null}"
+                     class="no-cover">
+
+                    Немає обкладинки
+
+                </div>
+
+            </div>
+
+            <div class="cover-info">
+
+                <h2 th:text="${book.title}">
+                    Назва книги
+                </h2>
+
+                <p th:if="${book.authors != null}"
+                   th:text="${#strings.listJoin(book.authors, ', ')}">
+                    Автор
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form th:action="@{/books/{id}/edit(id=${book.id})}"
+              method="post"
+              enctype="multipart/form-data"
+              class="edit-form">
+
+
+            <!-- CSRF -->
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+
+            <!-- Назва -->
+            <div class="form-group">
+
+                <label for="title">
+                    Назва книги
+                </label>
+
+                <input type="text"
+                       id="title"
+                       name="title"
+                       th:value="${book.title}"
+                       placeholder="Введіть назву книги"
+                       required>
+
+            </div>
+
+
+            <!-- Автори -->
+            <div class="form-group">
+
+                <label>
+                    Автори
+                </label>
+
+                <div id="authors-container"
+                     class="authors-container">
+
+                    <div class="author-row"
+                         th:each="author : ${book.authors}">
+
+                        <input type="text"
+                               name="author"
+                               th:value="${author}"
+                               placeholder="Ім'я автора"
+                               class="author-input">
+
+                        <button type="button"
+                                class="remove-author"
+                                onclick="removeAuthor(this)">
+                            ×
+                        </button>
+
+                    </div>
+
+
+                    <!-- Якщо авторів немає -->
+                    <div class="author-row"
+                         th:if="${book.authors == null or #lists.isEmpty(book.authors)}">
+
+                        <input type="text"
+                               name="author"
+                               placeholder="Ім'я автора"
+                               class="author-input">
+
+                        <button type="button"
+                                class="remove-author"
+                                onclick="removeAuthor(this)">
+                            ×
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button type="button"
+                        class="add-author-button"
+                        onclick="addAuthor()">
+
+                    + Додати автора
+
+                </button>
+
+            </div>
+
+
+            <!-- Опис -->
+            <div class="form-group">
+
+                <label for="description">
+                    Опис
+                </label>
+
+                <textarea id="description"
+                          name="description"
+                          rows="8"
+                          placeholder="Опис книги"
+                          th:text="${book.description}">
+                </textarea>
+
+            </div>
+
+
+            <!-- Жанри -->
+            <div class="form-group">
+
+                <label for="bookGenre">
+                    Жанри
+                </label>
+
+                <select id="bookGenre"
+                        name="bookGenre"
+                        multiple
+                        class="genre-select"
+                        required>
+
+                    <option th:each="genre : ${genres}"
+                            th:value="${genre.name()}"
+                            th:text="${genre.ukrainianName}"
+                            th:selected="${book.bookGenre != null
+                                          and book.bookGenre.contains(genre)}">
+
+                    </option>
+
+                </select>
+
+                <div class="field-hint">
+                    Для вибору декількох жанрів затисніть
+                    <strong>Ctrl</strong> і натискайте на потрібні жанри.
+                </div>
+
+            </div>
+
+
+            <!-- Статус читання -->
+            <div class="form-group">
+
+                <label for="readStatus">
+                    Статус читання
+                </label>
+
+                <select id="readStatus"
+                        name="readStatus"
+                        class="normal-select"
+                        required>
+
+                    <option th:each="status : ${readStatuses}"
+                            th:value="${status.name()}"
+                            th:text="${status}"
+                            th:selected="${status == book.readStatus}">
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Улюблена -->
+            <div class="favorite-section">
+
+                <!-- Відправляється, якщо checkbox вимкнений -->
+                <input type="hidden"
+                       name="favorite"
+                       value="false">
+
+                <label class="favorite-label">
+
+                    <input type="checkbox"
+                           id="favorite"
+                           name="favorite"
+                           value="true"
+                           th:checked="${book.favorite}">
+
+                    <span class="custom-checkbox"></span>
+
+                    <span>
+                        Додати книгу до улюблених
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- Заміна файлу -->
+            <div class="file-section">
+
+                <h3>
+                    Файл книги
+                </h3>
+
+                <div class="current-file"
+                     th:if="${book.fileMetadata != null}">
+
+                    <span class="file-icon">
+                        📖
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Поточний файл
+                        </strong>
+
+                        <span th:text="${book.fileMetadata.name}">
+                            book.epub
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <label for="file"
+                       class="file-label">
+
+                    <span>
+                        Вибрати новий файл
+                    </span>
+
+                    <input type="file"
+                           id="file"
+                           name="file"
+                           accept=".epub,.pdf,.fb2">
+
+                </label>
+
+                <div id="file-name"
+                     class="selected-file">
+                </div>
+
+                <div class="field-hint">
+                    Підтримуються EPUB, PDF та FB2.
+                    Якщо файл не вибрати — поточний файл залишиться.
+                </div>
+
+            </div>
+
+
+            <!-- Заміна обкладинки -->
+            <div class="file-section">
+
+                <h3>
+                    Обкладинка
+                </h3>
+
+                <label for="cover"
+                       class="file-label">
+
+                    <span>
+                        Вибрати нову обкладинку
+                    </span>
+
+                    <input type="file"
+                           id="cover"
+                           name="cover"
+                           accept="image/*">
+
+                </label>
+
+                <div id="cover-name"
+                     class="selected-file">
+                </div>
+
+                <div class="field-hint">
+                    Якщо обкладинку не вибрати —
+                    поточна обкладинка залишиться.
+                </div>
+
+            </div>
+
+
+            <!-- Кнопки -->
+            <div class="form-actions">
+
+                <a th:href="@{/books}"
+                   class="cancel-button">
+
+                    Скасувати
+
+                </a>
+
+                <button type="submit"
+                        class="save-button">
+
+                    Зберегти зміни
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    /*
+     * Додавання автора
+     */
+    function addAuthor() {
+
+        const container =
+            document.getElementById("authors-container");
+
+        const row =
+            document.createElement("div");
+
+        row.className = "author-row";
+
+        row.innerHTML = `
+            <input type="text"
+                   name="author"
+                   placeholder="Ім'я автора"
+                   class="author-input">
+
+            <button type="button"
+                    class="remove-author"
+                    onclick="removeAuthor(this)">
+                ×
+            </button>
+        `;
+
+        container.appendChild(row);
+    }
+
+
+    /*
+     * Видалення автора
+     */
+    function removeAuthor(button) {
+
+        const container =
+            document.getElementById("authors-container");
+
+        const rows =
+            container.querySelectorAll(".author-row");
+
+        if (rows.length <= 1) {
+            return;
+        }
+
+        button.parentElement.remove();
+    }
+
+
+    /*
+     * Вибраний файл книги
+     */
+    document
+        .getElementById("file")
+        .addEventListener("change", function () {
+
+            const fileName =
+                document.getElementById("file-name");
+
+            if (this.files.length > 0) {
+
+                fileName.textContent =
+                    "Вибраний файл: " +
+                    this.files[0].name;
+
+            } else {
+
+                fileName.textContent = "";
+
+            }
+
+        });
+
+
+    /*
+     * Вибрана обкладинка
+     */
+    document
+        .getElementById("cover")
+        .addEventListener("change", function () {
+
+            const coverName =
+                document.getElementById("cover-name");
+
+            if (this.files.length > 0) {
+
+                coverName.textContent =
+                    "Вибрана обкладинка: " +
+                    this.files[0].name;
+
+            } else {
+
+                coverName.textContent = "";
+
+            }
+
+        });
+
+</script>
+
+</body>
+</html>

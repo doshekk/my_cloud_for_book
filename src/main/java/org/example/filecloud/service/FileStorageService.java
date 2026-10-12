@@ -2,6 +2,7 @@ package org.example.filecloud.service;
 
 import org.example.filecloud.dao.CoverFileMetadata;
 import org.example.filecloud.dao.FileMetadata;
+import org.example.filecloud.dao.FileType;
 import org.example.filecloud.dao.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,29 @@ public class FileStorageService {
         validateFile(file);
         Objects.requireNonNull(user, "Користувач не може бути null");
 
+        String contentType = file.getContentType();
+
+        if (contentType == null) {
+            throw new IllegalArgumentException(
+                    "Не вдалося визначити тип файлу"
+            );
+        }
+
+        FileType fileType = switch (contentType) {
+
+            case "application/epub+zip" -> FileType.epub;
+
+            case "application/pdf" -> FileType.pdf;
+
+            case "application/x-fictionbook",
+                 "application/xml",
+                 "text/xml" -> FileType.fb2;
+
+            default -> throw new IllegalArgumentException(
+                    "Непідтримуваний тип файлу: " + contentType
+            );
+        };
+
         UUID uniqueKey = UUID.randomUUID();
 
         Path userPath = getUserPath(user);
@@ -71,6 +95,7 @@ public class FileStorageService {
             fileMetadata.setFileStoragePath(filePath.toString());
             fileMetadata.setName(name);
             fileMetadata.setUUID(uniqueKey.toString());
+            fileMetadata.setFleType(fileType);
 
             return fileMetadata;
 
@@ -153,16 +178,98 @@ public class FileStorageService {
     }
 
     @Transactional
+    public FileMetadata saveByteFileInFolder(
+            byte[] file,
+            String name,
+            FileType type,
+            User user
+    ) {
+
+        validateByteFile(file);
+        Objects.requireNonNull(user, "Користувач не може бути null");
+
+        UUID uniqueKey = UUID.randomUUID();
+
+        Path userPath = getUserPath(user);
+
+        try {
+            Files.createDirectories(userPath);
+
+            Path filePath = userPath.resolve(uniqueKey.toString());
+
+
+            Files.write(filePath, file);
+
+            FileMetadata fileMetadata = new FileMetadata();
+
+            fileMetadata.setFileStoragePath(filePath.toString());
+            fileMetadata.setName(name);
+            fileMetadata.setUUID(uniqueKey.toString());
+            fileMetadata.setFleType(type);
+
+            return fileMetadata;
+
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Не вдалося зберегти файл",
+                    e
+            );
+        }
+    }
+
+    @Transactional
+    public CoverFileMetadata saveByteCoverInFolder(
+            byte[] file,
+            User user
+    ) {
+
+        validateByteFile(file);
+        Objects.requireNonNull(user, "Користувач не може бути null");
+
+        UUID uniqueKey = UUID.randomUUID();
+
+        Path userPath = getUserPath(user);
+
+        try {
+            Files.createDirectories(userPath);
+
+            Path filePath = userPath.resolve(uniqueKey.toString());
+
+            Files.write(filePath, file);
+
+            CoverFileMetadata coverFileMetadata =
+                    new CoverFileMetadata();
+
+            coverFileMetadata.setFileStoragePath(filePath.toString());
+            coverFileMetadata.setUUID(uniqueKey.toString());
+
+            return coverFileMetadata;
+
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Не вдалося зберегти обкладинку",
+                    e
+            );
+        }
+    }
+
+
     private Path getUserPath(User user) {
         return storagePath.resolve(
                 String.valueOf(user.getId())
         );
     }
 
-    @Transactional
     private void validateFile(MultipartFile file) {
 
         if (file == null || file.isEmpty()) {
+            throw new IllegalStateException("Файл пустий");
+        }
+    }
+
+    private void validateByteFile(byte[] file) {
+
+        if (file == null || file.length == 0) {
             throw new IllegalStateException("Файл пустий");
         }
     }
